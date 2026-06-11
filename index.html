@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Krishna Vardhan — Data Engineer & Builder</title>
+  <title>Krishna Vardhan — Data Engineer · Building the systems that matter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
@@ -15,6 +15,9 @@
       --muted: 0 0% 53%;
       --stroke: 0 0% 12%;
       --accent: 0 0% 96%;
+      /* The one chromatic accent */
+      --grad-1: #89AACC;
+      --grad-2: #4E85BF;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -23,39 +26,47 @@
       background: hsl(var(--bg));
       color: hsl(var(--text));
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
     }
-    img, video { display: block; max-width: 100%; }
+    img { display: block; max-width: 100%; }
     button, a { font: inherit; color: inherit; cursor: pointer; text-decoration: none; }
 
     .font-display { font-family: 'Instrument Serif', serif; font-style: italic; }
     .muted { color: hsl(var(--muted)); }
-    .eyebrow { font-size: 0.72rem; color: hsl(var(--muted)); text-transform: uppercase; letter-spacing: 0.3em; }
+    .eyebrow {
+      font-size: 0.72rem; color: hsl(var(--muted)); text-transform: uppercase;
+      letter-spacing: 0.3em; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .eyebrow .bar { width: 28px; height: 1px; background: hsl(var(--stroke)); display: inline-block; }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .accent-gradient { background: linear-gradient(90deg, var(--grad-1) 0%, var(--grad-2) 100%); }
 
-    .accent-gradient { background: linear-gradient(90deg, #89AACC 0%, #4E85BF 100%); }
-
+    /* ─── Keyframes ─── */
     @keyframes scroll-down { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
     @keyframes role-fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; }
+    }
     @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
+    @keyframes loader-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ───── LOADING SCREEN ───── */
+    /* ─── Loading Screen ─── */
     #loader {
       position: fixed; inset: 0; z-index: 9999; background: hsl(var(--bg));
       transition: opacity 0.6s ease;
     }
     #loader.done { opacity: 0; pointer-events: none; }
-    .loader-label { position: absolute; top: 32px; left: 32px; }
+    .loader-label { position: absolute; top: 36px; left: 36px; }
     .loader-words {
       position: absolute; inset: 0; display: grid; place-items: center;
     }
     .loader-words span {
-      position: absolute; font-size: clamp(2.2rem, 7vw, 4.5rem);
-      color: hsl(var(--text) / 0.8); opacity: 0; transition: opacity 0.4s, transform 0.4s;
+      position: absolute;
+      font-size: clamp(2.2rem, 7vw, 4.5rem);
+      color: hsl(var(--text) / 0.8);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .loader-words span.active { opacity: 1; transform: translateY(0); }
-    .loader-words span.exit { opacity: 0; transform: translateY(-20px); }
     .loader-count {
       position: absolute; bottom: 48px; right: 40px;
       font-size: clamp(4rem, 14vw, 9rem); line-height: 1;
@@ -67,7 +78,7 @@
       box-shadow: 0 0 8px rgba(137,170,204,0.35);
     }
 
-    /* ───── HERO ───── */
+    /* ─── Hero ─── */
     .hero { position: relative; min-height: 100vh; display: grid; place-items: center; overflow: hidden; }
     .hero video, .hero .video-fallback {
       position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
@@ -78,8 +89,12 @@
       background: radial-gradient(ellipse at 30% 20%, #16243a 0%, #060810 55%, #020308 100%);
     }
     .hero .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.2); z-index: 1; }
-    .hero .bottom-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 192px; background: linear-gradient(to top, hsl(var(--bg)), transparent); z-index: 1; }
+    .hero .bottom-fade {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 192px;
+      background: linear-gradient(to top, hsl(var(--bg)), transparent); z-index: 1;
+    }
 
+    /* Nav */
     .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; justify-content: center; padding: 24px 16px; }
     .nav-pill {
       display: inline-flex; align-items: center; gap: 2px; border-radius: 999px;
@@ -93,7 +108,7 @@
     }
     .logo::before {
       content: ''; position: absolute; inset: 0; border-radius: 50%; padding: 2px;
-      background: linear-gradient(90deg, #89AACC 0%, #4E85BF 100%);
+      background: linear-gradient(90deg, var(--grad-1) 0%, var(--grad-2) 100%);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite: xor; mask-composite: exclude; transition: transform 0.5s ease;
     }
@@ -103,7 +118,7 @@
       position: relative; z-index: 1; width: 30px; height: 30px; border-radius: 50%;
       background: hsl(var(--bg)); display: grid; place-items: center; font-size: 13px;
     }
-    .nav-divider { width: 1px; height: 20px; background: hsl(var(--stroke)); margin: 0 4px; }
+    .nav-divider { width: 1px; height: 20px; background: hsl(var(--stroke)); margin: 0 6px; }
     .nav-link, .say-hi {
       font-size: 0.85rem; border-radius: 999px; padding: 8px 16px; transition: all 0.3s ease;
     }
@@ -113,7 +128,7 @@
     .say-hi { position: relative; display: inline-flex; align-items: center; gap: 4px; }
     .say-hi .ring {
       position: absolute; inset: -2px; border-radius: 999px; opacity: 0;
-      background: linear-gradient(90deg, #89AACC 0%, #4E85BF 100%); transition: opacity 0.3s ease;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-2)); transition: opacity 0.3s ease;
     }
     .say-hi:hover .ring { opacity: 1; }
     .say-hi .inner {
@@ -122,78 +137,96 @@
     }
 
     .hero-content { position: relative; z-index: 10; text-align: center; padding: 0 24px; }
-    .hero-eyebrow { display: block; margin-bottom: 32px; }
+    .hero-eyebrow { display: inline-block; margin-bottom: 32px; letter-spacing: 0.25em; font-size: 0.75rem; }
     .hero-name {
       font-size: clamp(3.5rem, 12vw, 9rem); line-height: 0.9; letter-spacing: -0.02em;
       margin-bottom: 24px;
     }
     .hero-role { font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-bottom: 8px; }
-    .hero-role .role-word { display: inline-block; animation: role-fade-in 0.4s ease-out; }
-    .hero-desc { font-size: 0.95rem; max-width: 28rem; margin: 16px auto 48px; line-height: 1.6; color: hsl(var(--muted)); }
+    .hero-role .role-word { display: inline-block; }
+    .hero-desc {
+      font-size: 0.95rem; max-width: 32rem; margin: 16px auto 48px; line-height: 1.65; color: hsl(var(--muted));
+    }
     .cta-row { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
-    .btn { position: relative; border-radius: 999px; font-size: 0.9rem; padding: 14px 28px; transition: transform 0.3s ease; display: inline-block; }
+    .btn {
+      position: relative; border-radius: 999px; font-size: 0.9rem; padding: 14px 28px;
+      transition: transform 0.3s ease; display: inline-block;
+    }
     .btn:hover { transform: scale(1.05); }
     .btn-solid { background: hsl(var(--text)); color: hsl(var(--bg)); }
-    .btn-outline { border: 2px solid hsl(var(--stroke)); background: hsl(var(--bg)); color: hsl(var(--text)); }
+    .btn-outline { border: 2px solid hsl(var(--stroke)); background: transparent; color: hsl(var(--text)); }
+    .btn-outline:hover { background: hsl(var(--stroke) / 0.3); }
 
     .scroll-ind { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 10; text-align: center; }
     .scroll-ind .lbl { font-size: 0.7rem; letter-spacing: 0.2em; color: hsl(var(--muted)); text-transform: uppercase; display: block; margin-bottom: 12px; }
     .scroll-ind .track { width: 1px; height: 40px; background: hsl(var(--stroke)); margin: 0 auto; overflow: hidden; position: relative; }
     .scroll-ind .track > i { display: block; width: 1px; height: 100%; background: hsl(var(--text)); animation: scroll-down 1.5s ease-in-out infinite; }
 
-    /* ───── REVEAL ───── */
-    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.25,0.1,0.25,1), transform 1s cubic-bezier(0.25,0.1,0.25,1); }
+    /* ─── Reveal (scroll-triggered animation) ─── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s cubic-bezier(0.25,0.1,0.25,1), transform 0.9s cubic-bezier(0.25,0.1,0.25,1); }
     .reveal.in { opacity: 1; transform: none; }
 
-    /* ───── SECTION HEADER ───── */
+    /* ─── Section header ─── */
     .sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 48px; flex-wrap: wrap; }
-    .sec-head .line { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-    .sec-head .line .bar { width: 32px; height: 1px; background: hsl(var(--stroke)); }
-    .sec-head h2 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; letter-spacing: -0.02em; }
-    .sec-head p { color: hsl(var(--muted)); font-size: 0.95rem; max-width: 30rem; margin-top: 16px; }
+    .sec-head h2 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; letter-spacing: -0.02em; margin-top: 14px; }
+    .sec-head p { color: hsl(var(--muted)); font-size: 0.95rem; max-width: 30rem; margin-top: 12px; line-height: 1.6; }
+    .view-all {
+      position: relative; display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 999px; padding: 10px 18px; font-size: 0.85rem; border: 1px solid hsl(var(--stroke));
+      transition: border-color 0.3s; white-space: nowrap;
+    }
+    .view-all .ring {
+      position: absolute; inset: -1px; border-radius: 999px; opacity: 0;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-2)); transition: opacity 0.3s; z-index: 0;
+    }
+    .view-all:hover .ring { opacity: 1; }
+    .view-all .inner { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 6px; background: hsl(var(--bg)); border-radius: 999px; padding: 0 2px; }
 
-    /* ───── WORKS BENTO ───── */
+    /* ─── Works Bento ─── */
     .works { padding: 48px 0; }
-    .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
-    .proj { position: relative; border: 1px solid hsl(var(--stroke)); background: hsl(var(--surface)); border-radius: 24px; overflow: hidden; cursor: pointer; grid-column: span 12; }
-    .proj-img { position: relative; width: 100%; height: 100%; min-height: 200px; }
-    .proj-img canvas, .proj-img .proj-placeholder {
-      width: 100%; height: 100%; position: absolute; inset: 0;
-      display: grid; place-items: center; color: hsl(var(--muted)); font-size: 0.9rem;
+    .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+    .proj {
+      position: relative; grid-column: span 12; border: 1px solid hsl(var(--stroke));
+      background: hsl(var(--surface)); border-radius: 24px; overflow: hidden; cursor: pointer;
     }
-    .proj-img .proj-bg {
-      width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
-    }
-    .proj:hover .proj-img .proj-bg { transform: scale(1.05); }
+    .proj-img { position: relative; width: 100%; height: 100%; }
+    .proj-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .proj:hover .proj-img img { transform: scale(1.05); }
     .proj .halftone {
-      position: absolute; inset: 0; opacity: 0.2; mix-blend-mode: multiply; pointer-events: none;
+      position: absolute; inset: 0; opacity: 0.15; mix-blend-mode: multiply; pointer-events: none;
       background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 4px 4px;
     }
-    .proj .hover-layer {
-      position: absolute; inset: 0; display: grid; place-items: center; opacity: 0;
-      background: hsl(var(--bg) / 0.7); backdrop-filter: blur(16px); transition: opacity 0.4s ease;
-    }
-    .proj:hover .hover-layer { opacity: 1; }
-    .proj-label {
-      position: relative; display: inline-flex; align-items: center; gap: 6px;
-      background: #fff; color: #111; border-radius: 999px; padding: 10px 20px; font-size: 0.9rem;
-    }
-    .proj-label::before {
-      content: ''; position: absolute; inset: -2px; border-radius: 999px; z-index: -1;
-      background: linear-gradient(90deg, #89AACC, #4E85BF, #89AACC); background-size: 200% 100%;
-      animation: gradient-shift 6s ease infinite;
-    }
-    .proj-desc {
+    .proj-info {
       position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; z-index: 2;
       background: linear-gradient(to top, hsl(var(--surface)) 60%, transparent);
     }
-    .proj-desc h3 { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
-    .proj-desc .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
-    .proj-desc .tags span {
-      font-size: 0.7rem; padding: 3px 8px; border-radius: 99px;
+    .proj-info h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; }
+    .proj-info .proj-desc-text {
+      font-size: 0.82rem; color: hsl(var(--muted)); margin-top: 6px; line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .proj-info .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .proj-info .tags span {
+      font-size: 0.68rem; padding: 3px 8px; border-radius: 99px;
       background: hsl(var(--stroke) / 0.5); color: hsl(var(--muted));
+      letter-spacing: 0.02em;
+    }
+    .proj-hover {
+      position: absolute; inset: 0; display: grid; place-items: center; opacity: 0;
+      background: hsl(var(--bg) / 0.7); backdrop-filter: blur(16px); transition: opacity 0.4s ease; z-index: 3;
+    }
+    .proj:hover .proj-hover { opacity: 1; }
+    .proj-hover .lbl {
+      position: relative; display: inline-flex; align-items: center; gap: 6px;
+      background: #fff; color: #111; border-radius: 999px; padding: 10px 20px; font-size: 0.9rem;
+    }
+    .proj-hover .lbl::before {
+      content: ''; position: absolute; inset: -2px; border-radius: 999px; z-index: -1;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-2), var(--grad-1));
+      background-size: 200% 100%; animation: gradient-shift 6s ease infinite;
     }
     @media (min-width: 768px) {
+      .bento { gap: 24px; }
       .proj:nth-child(1) { grid-column: span 7; aspect-ratio: 4/3; }
       .proj:nth-child(2) { grid-column: span 5; aspect-ratio: 3/4; }
       .proj:nth-child(3) { grid-column: span 5; aspect-ratio: 3/4; }
@@ -201,28 +234,30 @@
     }
     @media (max-width: 767px) { .proj { aspect-ratio: 4/3; } }
 
-    /* ───── JOURNAL ───── */
+    /* ─── Journal ─── */
     .journal { padding: 64px 0; }
     .entries { display: flex; flex-direction: column; gap: 16px; }
     .entry {
       display: flex; align-items: center; gap: 24px; padding: 16px;
       background: hsl(var(--surface) / 0.3); border: 1px solid hsl(var(--stroke));
-      border-radius: 40px; transition: background 0.3s ease;
+      border-radius: 40px; transition: all 0.3s ease;
     }
-    .entry:hover { background: hsl(var(--surface)); }
-    .entry .entry-img {
-      width: 72px; height: 72px; border-radius: 24px; flex: 0 0 auto;
-      overflow: hidden; background: hsl(var(--surface));
+    .entry:hover { background: hsl(var(--surface)); border-color: hsl(var(--stroke) / 0.6); }
+    .entry img {
+      width: 72px; height: 72px; border-radius: 24px; object-fit: cover; flex: 0 0 auto;
+      background: hsl(var(--surface));
     }
-    .entry .entry-img canvas { width: 100%; height: 100%; }
     .entry .body { flex: 1; min-width: 0; }
-    .entry .body h3 { font-size: 1.15rem; font-weight: 500; letter-spacing: -0.01em; }
-    .entry .body p { font-size: 0.82rem; color: hsl(var(--muted)); margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .entry .meta { display: flex; gap: 16px; color: hsl(var(--muted)); font-size: 0.8rem; margin-top: 6px; }
+    .entry .body h3 { font-size: 1.1rem; font-weight: 500; letter-spacing: -0.01em; }
+    .entry .body .entry-summary {
+      font-size: 0.82rem; color: hsl(var(--muted)); margin-top: 4px; line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .entry .meta { display: flex; gap: 16px; color: hsl(var(--muted)); font-size: 0.78rem; margin-top: 6px; }
     .entry .date { color: hsl(var(--muted)); font-size: 0.8rem; white-space: nowrap; }
-    @media (max-width: 767px) { .entry { border-radius: 28px; } }
+    @media (max-width: 767px) { .entry { border-radius: 28px; padding: 14px; gap: 16px; } }
 
-    /* ───── EXPLORATIONS ───── */
+    /* ─── Explorations ─── */
     .explore { position: relative; min-height: 300vh; }
     .explore-pin {
       position: sticky; top: 0; height: 100vh; display: grid; place-items: center;
@@ -230,12 +265,13 @@
     }
     .explore-pin .inner { pointer-events: auto; }
     .explore-pin h2 { font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1.05; margin: 16px 0; }
+    .explore-pin p { max-width: 26rem; margin: 0 auto; color: hsl(var(--muted)); line-height: 1.6; }
     .explore-btn {
       display: inline-flex; align-items: center; gap: 8px; border: 1px solid hsl(var(--stroke));
       border-radius: 999px; padding: 12px 22px; font-size: 0.9rem; margin-top: 16px;
-      transition: border-color 0.3s;
+      transition: all 0.3s;
     }
-    .explore-btn:hover { border-color: hsl(var(--muted)); }
+    .explore-btn:hover { border-color: hsl(var(--muted)); background: hsl(var(--stroke) / 0.3); }
     .parallax-cols {
       position: absolute; inset: 0; z-index: 20; display: grid; grid-template-columns: 1fr 1fr;
       gap: 48px; max-width: 1400px; margin: 0 auto; padding: 0 32px; pointer-events: none;
@@ -247,18 +283,30 @@
       border: 1px solid hsl(var(--stroke)); pointer-events: auto; cursor: pointer; will-change: transform;
       position: relative; background: hsl(var(--surface));
     }
-    .pcard canvas { width: 100%; height: 100%; }
+    .pcard img { width: 100%; height: 100%; object-fit: cover; }
+    .pcard-label {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 14px;
+      background: linear-gradient(to top, hsl(var(--bg) / 0.9), transparent);
+    }
+    .pcard-label span {
+      display: block; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.02em;
+    }
+    .pcard-label small {
+      display: block; font-size: 0.65rem; color: hsl(var(--muted)); margin-top: 2px;
+    }
     .pcol:nth-child(2) .pcard { margin-left: auto; }
     @media (max-width: 767px) { .parallax-cols { gap: 20px; padding: 0 16px; } }
 
-    /* ───── STATS ───── */
+    /* ─── Stats ─── */
     .stats { padding: 64px 0; }
     .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-    .stat .num { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1; }
-    .stat .lbl { color: hsl(var(--muted)); font-size: 0.85rem; margin-top: 12px; }
-    @media (max-width: 767px) { .stats-grid { grid-template-columns: 1fr; gap: 24px; text-align: center; } }
+    .stat { text-align: center; }
+    .stat .num { font-size: clamp(2.8rem, 6vw, 4.5rem); line-height: 1; }
+    .stat .lbl { color: hsl(var(--muted)); font-size: 0.9rem; margin-top: 12px; font-weight: 400; }
+    .stat .lbl-sub { color: hsl(var(--muted) / 0.7); font-size: 0.75rem; margin-top: 4px; }
+    @media (max-width: 767px) { .stats-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; } }
 
-    /* ───── CONTACT / FOOTER ───── */
+    /* ─── Contact / Footer ─── */
     .contact { position: relative; padding: 64px 0 48px; overflow: hidden; }
     .contact .bgvid, .contact .video-fallback {
       position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
@@ -267,17 +315,27 @@
     .contact .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); z-index: 1; }
     .contact .inner { position: relative; z-index: 2; }
     .marquee { overflow: hidden; white-space: nowrap; margin: 32px 0 48px; }
-    .marquee .track { display: inline-flex; will-change: transform; gap: 32px; }
-    .marquee span { font-size: clamp(2rem, 6vw, 4rem); color: hsl(var(--text) / 0.85); white-space: nowrap; }
+    .marquee .track { display: inline-flex; will-change: transform; }
+    .marquee span {
+      font-size: clamp(2rem, 6vw, 4rem); color: hsl(var(--text) / 0.85);
+      white-space: nowrap; padding-right: 32px;
+    }
     .contact-cta { text-align: center; }
     .email-btn {
       position: relative; display: inline-flex; align-items: center; gap: 8px;
-      border-radius: 999px; padding: 16px 32px; font-size: 1rem; transition: transform 0.3s;
+      border-radius: 999px; transition: transform 0.3s; margin: 0 auto;
     }
     .email-btn:hover { transform: scale(1.05); }
-    .email-btn .ring { position: absolute; inset: -2px; border-radius: 999px; opacity: 0; background: linear-gradient(90deg,#89AACC,#4E85BF); transition: opacity 0.3s; }
+    .email-btn .ring {
+      position: absolute; inset: -2px; border-radius: 999px; opacity: 0;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-2)); transition: opacity 0.3s;
+    }
     .email-btn:hover .ring { opacity: 1; }
-    .email-btn .inner { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; background: hsl(var(--surface)); border-radius: 999px; padding: 0 20px; height: 48px; }
+    .email-btn .inner {
+      position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 10px;
+      background: hsl(var(--surface)); border-radius: 999px; padding: 0 28px; height: 52px;
+      border: 1px solid hsl(var(--stroke)); font-size: 1rem;
+    }
     .footer-bar {
       display: flex; justify-content: space-between; align-items: center; gap: 24px;
       margin-top: 64px; padding-top: 24px; border-top: 1px solid hsl(var(--stroke)); flex-wrap: wrap;
@@ -287,30 +345,38 @@
     .socials a:hover { color: hsl(var(--text)); }
     .avail { display: inline-flex; align-items: center; gap: 8px; color: hsl(var(--muted)); font-size: 0.85rem; }
     .avail .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulse-dot 2s ease-in-out infinite; }
+    .footer-bar .copyright { color: hsl(var(--muted) / 0.5); font-size: 0.75rem; }
 
-    /* ───── LIGHTBOX ───── */
+    /* ─── Lightbox ─── */
     #lightbox {
       position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.92);
       display: none; place-items: center; padding: 40px; cursor: zoom-out;
     }
     #lightbox.open { display: grid; }
-    #lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 16px; }
+    #lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+
+    /* ─── Responsive fine-tune ─── */
+    @media (max-width: 767px) {
+      .hero-name { font-size: clamp(3rem, 14vw, 5rem); }
+      .nav-pill { padding: 6px; }
+      .nav-link, .say-hi { padding: 6px 12px; font-size: 0.78rem; }
+    }
   </style>
 </head>
 <body>
-  <!-- ───── LOADING SCREEN ───── -->
+  <!-- ─── LOADING SCREEN ─── -->
   <div id="loader">
     <div class="loader-label eyebrow">Krishna Vardhan</div>
     <div class="loader-words font-display">
-      <span class="active" data-w="0">Build</span>
-      <span data-w="1">Engineer</span>
-      <span data-w="2">Teach</span>
+      <span style="opacity:1;transform:translateY(0)" data-w="0">Build</span>
+      <span style="opacity:0;transform:translateY(20px)" data-w="1">Engineer</span>
+      <span style="opacity:0;transform:translateY(20px)" data-w="2">Ship</span>
     </div>
     <div class="loader-count font-display" id="count">000</div>
     <div class="loader-bar"><div class="accent-gradient" id="loadbar"></div></div>
   </div>
 
-  <!-- ───── HERO ───── -->
+  <!-- ─── HERO ─── -->
   <section class="hero" id="home">
     <video id="heroVideo" autoplay muted loop playsinline>
       <source src="https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8" type="application/x-mpegURL">
@@ -332,10 +398,14 @@
     </nav>
 
     <div class="hero-content">
-      <span class="hero-eyebrow eyebrow">Portfolio '26</span>
+      <span class="hero-eyebrow eyebrow"><i class="bar"></i>Portfolio '26</span>
       <h1 class="hero-name font-display">Krishna Vardhan</h1>
-      <p class="hero-role">A <span class="font-display role-word" id="roleWord">Builder</span> lives in Kadapa.</p>
-      <p class="hero-desc">Building data pipelines, automation tools, and human-centered systems. Banking ETL to GCP AI/ML — one project at a time.</p>
+      <p class="hero-role">A <span class="font-display role-word" id="roleWord">Builder</span> based in Kadapa.</p>
+      <p class="hero-desc">
+        Data engineer and systems builder. I design pipelines that move real data,
+        automate workflows that save real time, and build tools that solve real problems — 
+        from banking ETL to GCP AI/ML, from OCR document verification to health data pipelines.
+      </p>
       <div class="cta-row">
         <a class="btn btn-solid" href="#work">See Works</a>
         <a class="btn btn-outline" href="#contact">Reach out...</a>
@@ -348,113 +418,168 @@
     </div>
   </section>
 
-  <!-- ───── SELECTED WORKS ───── -->
+  <!-- ─── SELECTED WORKS ─── -->
   <section class="works" id="work">
     <div class="container">
       <div class="sec-head reveal">
         <div>
-          <span class="line"><i class="bar"></i><span class="eyebrow">Selected Work</span></span>
-          <h2>Built <span class="font-display">projects</span></h2>
-          <p>Data pipelines, OCR systems, health automation — each solving a real problem.</p>
+          <span class="eyebrow"><i class="bar"></i>Selected Work</span>
+          <h2>Production <span class="font-display">projects</span></h2>
+          <p>Every project here solves a real constraint — time, accuracy, access, or care. No tutorials, no toys.</p>
         </div>
+        <a class="view-all" href="https://github.com/mamidi7" target="_blank"><span class="ring"></span><span class="inner">All on GitHub →</span></a>
       </div>
       <div class="bento">
-        <!-- VFS Document Verification -->
+        <!-- Project 1: VFS Document Verification -->
         <a class="proj reveal" href="https://github.com/mamidi7/vfs-booking-system" target="_blank">
           <div class="proj-img">
-            <canvas id="projBg1" width="800" height="600"></canvas>
+            <img data-img="p1" alt="VFS Document Verification">
             <div class="halftone"></div>
           </div>
-          <div class="hover-layer"><span class="proj-label">View — <span class="font-display">VFS Doc Verification</span></span></div>
-          <div class="proj-desc">
+          <div class="proj-hover"><span class="lbl">View — <span class="font-display">VFS Doc Verification</span></span></div>
+          <div class="proj-info">
             <h3>VFS Document Verification</h3>
-            <div class="tags"><span>FastAPI</span><span>OCR</span><span>GCP Vision</span><span>Telegram</span></div>
+            <div class="proj-desc-text">
+              Production-grade OCR system for passport and visa-document verification across 6 countries. 
+              Three OCR engines stacked — GCP Vision primary, EasyOCR fallback, Tesseract last resort — 
+              with a Telegram bot frontend for zero-touch client onboarding.
+            </div>
+            <div class="tags">
+              <span>FastAPI</span><span>GCP Vision</span><span>OCR Pipeline</span><span>Telegram Bot</span><span>SQLite</span>
+            </div>
           </div>
         </a>
-        <!-- Helio Health Report -->
+        <!-- Project 2: Helio Health Report -->
         <a class="proj reveal" href="https://github.com/mamidi7/helio-report" target="_blank">
           <div class="proj-img">
-            <canvas id="projBg2" width="600" height="800"></canvas>
+            <img data-img="p2" alt="Helio Health Report">
             <div class="halftone"></div>
           </div>
-          <div class="hover-layer"><span class="proj-label">View — <span class="font-display">Helio Health Report</span></span></div>
-          <div class="proj-desc">
+          <div class="proj-hover"><span class="lbl">View — <span class="font-display">Helio Health Report</span></span></div>
+          <div class="proj-info">
             <h3>Helio Health Report</h3>
-            <div class="tags"><span>Python</span><span>Health Connect</span><span>SQLite</span><span>Telegram</span></div>
+            <div class="proj-desc-text">
+              Daily health data pipeline from an Amazfit Helio strap — parses Health Connect SQLite exports, 
+              generates structured reports with step counts, HRV, sleep analysis, and a motivation engine. 
+              Delivered via Telegram every morning. Built for my father's CKD monitoring.
+            </div>
+            <div class="tags">
+              <span>Python</span><span>Health Connect</span><span>SQLite</span><span>Telegram API</span><span>Data Pipeline</span>
+            </div>
           </div>
         </a>
-        <!-- GenAI Daily Grind -->
+        <!-- Project 3: GCP GenAI Daily Grind -->
         <a class="proj reveal" href="https://github.com/mamidi7/gcp-genai-daily-grind" target="_blank">
           <div class="proj-img">
-            <canvas id="projBg3" width="600" height="800"></canvas>
+            <img data-img="p3" alt="GCP GenAI Daily Grind">
             <div class="halftone"></div>
           </div>
-          <div class="hover-layer"><span class="proj-label">View — <span class="font-display">GenAI Daily Grind</span></span></div>
-          <div class="proj-desc">
+          <div class="proj-hover"><span class="lbl">View — <span class="font-display">GenAI Daily Grind</span></span></div>
+          <div class="proj-info">
             <h3>GCP GenAI Daily Grind</h3>
-            <div class="tags"><span>Vertex AI</span><span>LangChain</span><span>RAG</span><span>BigQuery</span></div>
+            <div class="proj-desc-text">
+              A 56-day structured deep-dive into Google Cloud AI/ML — Vertex AI Pipelines, LangChain RAG,
+              BigQuery ML, document intelligence, and embedding-based search. Every day ships working code,
+              architecture notes, and a production-ready pattern. My public ML apprenticeship.
+            </div>
+            <div class="tags">
+              <span>Vertex AI</span><span>LangChain</span><span>RAG</span><span>BigQuery</span><span>GCP</span>
+            </div>
           </div>
         </a>
-        <!-- Vontimitta Land Records -->
+        <!-- Project 4: Dad's Health Data Pipeline (NEW) -->
         <a class="proj reveal" href="https://github.com/mamidi7" target="_blank">
           <div class="proj-img">
-            <canvas id="projBg4" width="800" height="600"></canvas>
+            <img data-img="p4" alt="Dad's Health Data Pipeline">
             <div class="halftone"></div>
           </div>
-          <div class="hover-layer"><span class="proj-label">View — <span class="font-display">Land Records Tool</span></span></div>
-          <div class="proj-desc">
-            <h3>AP Land Records Assistant</h3>
-            <div class="tags"><span>Python</span><span>Web Scraping</span><span>Govt Portals</span></div>
+          <div class="proj-hover"><span class="lbl">View — <span class="font-display">Dad's Health Pipeline</span></span></div>
+          <div class="proj-info">
+            <h3>Dad's Health Data Pipeline</h3>
+            <div class="proj-desc-text">
+              A complete caregiving data system for my father (70M, CKD, anemia, post-stent). 
+              Amazfit Helio strap → Health Connect → SQLite parser → daily report with step/HRV/sleep trends.
+              Plus a medical PDF pipeline that downloads lab reports from Google Drive, OCRs them via GCP Vision,
+              and extracts critical values (creatinine, hemoglobin, eGFR) into a structured health timeline.
+            </div>
+            <div class="tags">
+              <span>Wearable Data</span><span>GCP Vision OCR</span><span>Medical PDFs</span><span>Python</span><span>Health Monitor</span>
+            </div>
           </div>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ───── JOURNAL ───── -->
+  <!-- ─── JOURNAL ─── -->
   <section class="journal" id="journal">
     <div class="container">
       <div class="sec-head reveal">
         <div>
-          <span class="line"><i class="bar"></i><span class="eyebrow">Journal</span></span>
-          <h2>Recent <span class="font-display">notes</span></h2>
-          <p>Building in the open — what I learn, what breaks, and how I fix it.</p>
+          <span class="eyebrow"><i class="bar"></i>Journal</span>
+          <h2>Building in <span class="font-display">the open</span></h2>
+          <p>What I learn, what breaks, and how I fix it — documented as it happens.</p>
         </div>
+        <a class="view-all" href="https://github.com/mamidi7" target="_blank"><span class="ring"></span><span class="inner">All posts →</span></a>
       </div>
       <div class="entries">
         <div class="entry reveal">
-          <div class="entry-img"><canvas id="journalImg1" width="144" height="144"></canvas></div>
+          <img data-img="j1" alt="">
           <div class="body">
-            <h3>Building an OCR pipeline from scratch</h3>
-            <p>GCP Vision + EasyOCR + Tesseract — comparing accuracy across 3 engines for passport verification. Spoiler: Vision wins, but fallbacks matter.</p>
-            <div class="meta"><span>7 min read</span></div>
+            <h3>Building a production OCR pipeline from zero</h3>
+            <div class="entry-summary">
+              Three engines, one pipeline, real documents. GCP Vision handles the heavy lifting, 
+              EasyOCR catches the edge cases, and Tesseract is the last resort. The hard part wasn't 
+              the OCR — it was building a fallback chain that degrades gracefully without 
+              confusing the user. Passport verification across 6 countries taught me more about 
+              error handling than any tutorial ever could.
+            </div>
+            <div class="meta"><span>8 min read</span><span>OCR · GCP · Production</span></div>
           </div>
           <span class="date">May 2026</span>
         </div>
         <div class="entry reveal">
-          <div class="entry-img"><canvas id="journalImg2" width="144" height="144"></canvas></div>
+          <img data-img="j2" alt="">
           <div class="body">
-            <h3>GCP Vertex AI — my first 30 days</h3>
-            <p>From BigQuery to Vertex AI Pipelines. What surprised me, what broke, and the RAG system that finally worked.</p>
-            <div class="meta"><span>5 min read</span></div>
+            <h3>56 days of GCP AI/ML — what stuck</h3>
+            <div class="entry-summary">
+              Vertex AI Pipelines, LangChain RAG, BigQuery ML, and embedding search — one concept per day, 
+              every day for 56 days. The biggest surprise: BigQuery ML is genuinely underrated for 
+              tabular workflows, and RAG evaluation is harder than building the RAG itself. 
+              Day 37 (custom model serving on Vertex AI) nearly broke me. Day 42 (text-embedding-004 
+              for semantic search) made it all worth it.
+            </div>
+            <div class="meta"><span>10 min read</span><span>GCP · Vertex AI · RAG</span></div>
           </div>
           <span class="date">Apr 2026</span>
         </div>
         <div class="entry reveal">
-          <div class="entry-img"><canvas id="journalImg3" width="144" height="144"></canvas></div>
+          <img data-img="j3" alt="">
           <div class="body">
-            <h3>Caring and coding — a balancing act</h3>
-            <p>Building production systems while being a primary caregiver. Lessons in prioritization, energy management, and what really matters.</p>
-            <div class="meta"><span>6 min read</span></div>
+            <h3>Data pipelines for caregiving — my father's health stack</h3>
+            <div class="entry-summary">
+              When your father has CKD, anemia, and a recent stent, waiting for the next hospital visit 
+              to spot a trend isn't good enough. I built a daily data pipeline from his Amazfit Helio strap, 
+              a medical PDF OCR system for his lab reports, and a Telegram delivery bot that sends me 
+              the numbers every morning. The pipeline caught a hemoglobin drop two days before the 
+              lab called. This is what engineering for care looks like.
+            </div>
+            <div class="meta"><span>12 min read</span><span>Health · Pipeline · Caregiving</span></div>
           </div>
           <span class="date">Mar 2026</span>
         </div>
         <div class="entry reveal">
-          <div class="entry-img"><canvas id="journalImg4" width="144" height="144"></canvas></div>
+          <img data-img="j4" alt="">
           <div class="body">
-            <h3>Teaching kids to code with animation</h3>
-            <p>Animated HTML/SVG worksheets for 6-18 year olds. Building visual tools that make concepts click without a single line of setup.</p>
-            <div class="meta"><span>4 min read</span></div>
+            <h3>Teaching kids to code with animated HTML worksheets</h3>
+            <div class="entry-summary">
+              Zero setup, zero install — just a browser. I built animated HTML/SVG worksheets for 
+              6-18 year olds using shadcn-inspired design, CSS animations, and cubic-bezier(0.16,1,0.3,1) 
+              easing. No IDEs, no accounts, no "install Python first." The worksheets teach loops, 
+              conditionals, and data structures through visual puzzles that animate as you solve them. 
+              Results: kids stay engaged 3x longer than with text-based exercises.
+            </div>
+            <div class="meta"><span>6 min read</span><span>Education · Animation · HTML</span></div>
           </div>
           <span class="date">Feb 2026</span>
         </div>
@@ -462,42 +587,72 @@
     </div>
   </section>
 
-  <!-- ───── EXPLORATIONS ───── -->
+  <!-- ─── EXPLORATIONS ─── -->
   <section class="explore" id="explore">
     <div class="explore-pin">
       <div class="inner container">
-        <span class="eyebrow">Explorations</span>
-        <h2 class="font-display" style="letter-spacing:-0.02em;">Lab & sandbox</h2>
-        <p class="muted" style="max-width:26rem;margin:0 auto;">Side experiments, prototypes, and things that haven't shipped — yet.</p>
+        <span class="eyebrow"><i class="bar"></i>Lab & Sandbox</span>
+        <h2 class="font-display">Things I'm <span style="color: hsl(var(--muted));">tinkering with</span></h2>
+        <p>Side experiments, prototype ideas, and things that haven't shipped — yet.</p>
         <a class="explore-btn" href="https://github.com/mamidi7" target="_blank">Explore on GitHub ↗</a>
       </div>
     </div>
     <div class="parallax-cols" id="parallaxCols">
       <div class="pcol" id="pcol1">
-        <div class="pcard" style="transform:rotate(-3deg)"><canvas id="expCard1" width="320" height="320"></canvas></div>
-        <div class="pcard" style="transform:rotate(2deg)"><canvas id="expCard2" width="320" height="320"></canvas></div>
-        <div class="pcard" style="transform:rotate(-1deg)"><canvas id="expCard3" width="320" height="320"></canvas></div>
+        <div class="pcard" style="transform:rotate(-3deg)">
+          <img data-img="e1" alt="">
+          <div class="pcard-label"><span>Airport Transfer App</span><small>SwiftUI prototype · Real-time tracking</small></div>
+        </div>
+        <div class="pcard" style="transform:rotate(2deg)">
+          <img data-img="e2" alt="">
+          <div class="pcard-label"><span>Weather Dashboard</span><small>GFS data · Terminal charts · India maps</small></div>
+        </div>
+        <div class="pcard" style="transform:rotate(-1deg)">
+          <img data-img="e3" alt="">
+          <div class="pcard-label"><span>RAG Evaluation Harness</span><small>Keyword · Semantic · LLM-as-judge</small></div>
+        </div>
       </div>
       <div class="pcol" id="pcol2">
-        <div class="pcard" style="transform:rotate(2deg)"><canvas id="expCard4" width="320" height="320"></canvas></div>
-        <div class="pcard" style="transform:rotate(-2deg)"><canvas id="expCard5" width="320" height="320"></canvas></div>
-        <div class="pcard" style="transform:rotate(3deg)"><canvas id="expCard6" width="320" height="320"></canvas></div>
+        <div class="pcard" style="transform:rotate(2deg)">
+          <img data-img="e4" alt="">
+          <div class="pcard-label"><span>Animated Worksheets Engine</span><small>Kids 6-18 · CSS puzzles · Zero setup</small></div>
+        </div>
+        <div class="pcard" style="transform:rotate(-2deg)">
+          <img data-img="e5" alt="">
+          <div class="pcard-label"><span>UK Sponsorship Tracker</span><small>Job search · Market analysis · ILR path</small></div>
+        </div>
+        <div class="pcard" style="transform:rotate(3deg)">
+          <img data-img="e6" alt="">
+          <div class="pcard-label"><span>AP Govt Portal Scanner</span><small>Land records · Caste certs · Automation</small></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ───── STATS ───── -->
+  <!-- ─── STATS ─── -->
   <section class="stats">
     <div class="container">
       <div class="stats-grid reveal">
-        <div class="stat"><div class="num font-display">12+</div><div class="lbl">Projects Built</div></div>
-        <div class="stat"><div class="num font-display">15+</div><div class="lbl">Technologies</div></div>
-        <div class="stat"><div class="num font-display">56</div><div class="lbl">Days of Daily Grind</div></div>
+        <div class="stat">
+          <div class="num font-display accent-gradient" style="background-clip:text;-webkit-background-clip:text;color:transparent;">12+</div>
+          <div class="lbl">Production Projects</div>
+          <div class="lbl-sub">From OCR to health data to ETL</div>
+        </div>
+        <div class="stat">
+          <div class="num font-display accent-gradient" style="background-clip:text;-webkit-background-clip:text;color:transparent;">15+</div>
+          <div class="lbl">Technologies</div>
+          <div class="lbl-sub">GCP, Python, FastAPI, SQL, LLMs</div>
+        </div>
+        <div class="stat">
+          <div class="num font-display accent-gradient" style="background-clip:text;-webkit-background-clip:text;color:transparent;">56</div>
+          <div class="lbl">Days of Daily Grind</div>
+          <div class="lbl-sub">Structured GCP AI/ML deep-dive</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ───── CONTACT / FOOTER ───── -->
+  <!-- ─── CONTACT / FOOTER ─── -->
   <section class="contact" id="contact">
     <video class="bgvid" autoplay muted loop playsinline>
       <source src="https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8" type="application/x-mpegURL">
@@ -507,7 +662,10 @@
     <div class="inner container">
       <div class="marquee"><div class="track" id="marqueeTrack"></div></div>
       <div class="contact-cta">
-        <a class="email-btn" href="mailto:krishnavardhanai7@gmail.com"><span class="ring"></span><span class="inner">krishnavardhanai7@gmail.com</span></a>
+        <a class="email-btn" href="mailto:krishnavardhanai7@gmail.com">
+          <span class="ring"></span>
+          <span class="inner">krishnavardhanai7@gmail.com <span style="font-size:1.2rem;">↗</span></span>
+        </a>
       </div>
       <div class="footer-bar">
         <div class="socials">
@@ -516,61 +674,75 @@
           <a href="mailto:krishnavardhanai7@gmail.com">Email</a>
         </div>
         <div class="avail"><span class="dot"></span>Available for projects</div>
+        <span class="copyright">Krishna Vardhan · 2026</span>
       </div>
     </div>
   </section>
 
+  <!-- ─── LIGHTBOX ─── -->
   <div id="lightbox" onclick="this.classList.remove('open')"><img id="lightboxImg" alt=""></div>
 
   <script>
-    // ───── Loading screen ─────
-    (function loader() {
-      var el = document.getElementById('loader');
-      var countEl = document.getElementById('count');
-      var barEl = document.getElementById('loadbar');
-      var words = [].slice.call(document.querySelectorAll('.loader-words span'));
-      var start = Date.now();
-      var DUR = 2700;
-      var wordInterval = 900;
-      var wi = 0;
+    // ── Inline placeholder images (SVG data URIs) ──
+    var IMGS = {"p1": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgODAwIDYwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWEyYTNhIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGEwZTE0Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIxMzciIGN5PSI1ODIiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDUzIi8+PGNpcmNsZSBjeD0iNTA3IiBjeT0iNDYwIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4OSIvPjxjaXJjbGUgY3g9IjIxNCIgY3k9Ijk2IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzMyIvPjxjaXJjbGUgY3g9IjM5OSIgY3k9IjQ0MyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOTMiLz48Y2lyY2xlIGN4PSIyNzIiIGN5PSIyMzQiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTExIi8+PGNpcmNsZSBjeD0iMzEiIGN5PSIyMiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODgiLz48Y2lyY2xlIGN4PSI5IiBjeT0iMzkwIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjExNyIvPjxjaXJjbGUgY3g9Ijc0MyIgY3k9IjI5IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5OSIvPjxjaXJjbGUgY3g9IjUwNyIgY3k9IjU2NiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjEiLz48Y2lyY2xlIGN4PSI2OTMiIGN5PSIyMjQiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTE2Ii8+PGNpcmNsZSBjeD0iMjIiIGN5PSI0MjYiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQ3Ii8+PGNpcmNsZSBjeD0iNzQxIiBjeT0iMzAzIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5NyIvPjxjaXJjbGUgY3g9IjczOCIgY3k9IjUxMiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzYiLz48Y2lyY2xlIGN4PSI2ODYiIGN5PSIxOTQiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDU2Ii8+PGNpcmNsZSBjeD0iNTExIiBjeT0iNTE3IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4MyIvPjxjaXJjbGUgY3g9IjM1IiBjeT0iNDkxIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5NyIvPjxjaXJjbGUgY3g9IjQxMyIgY3k9IjQyNCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjMiLz48Y2lyY2xlIGN4PSI3MTkiIGN5PSIzODMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDciLz48Y2lyY2xlIGN4PSI1MjAiIGN5PSIxMTAiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDc3Ii8+PGNpcmNsZSBjeD0iNDAyIiBjeT0iMzc5IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5NiIvPjwvc3ZnPg==", "p2": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iODAwIiB2aWV3Qm94PSIwIDAgNjAwIDgwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWEyYTMwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGExNDE4Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI4MDAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSI1NyIgY3k9IjkzIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2MiIvPjxjaXJjbGUgY3g9IjE3MyIgY3k9Ijc1MyIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTMiLz48Y2lyY2xlIGN4PSIyMTciIGN5PSI2MjEiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDgyIi8+PGNpcmNsZSBjeD0iMTYyIiBjeT0iNDQxIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwMiIvPjxjaXJjbGUgY3g9IjUyMSIgY3k9IjM4MCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzUiLz48Y2lyY2xlIGN4PSIzNiIgY3k9IjI4IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3MiIvPjxjaXJjbGUgY3g9IjMyNiIgY3k9IjM4OSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMSIvPjxjaXJjbGUgY3g9IjUzOCIgY3k9IjE2OCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTEiLz48Y2lyY2xlIGN4PSIyNCIgY3k9IjE4MCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDYiLz48Y2lyY2xlIGN4PSI1MjIiIGN5PSI1MjIiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTIiLz48Y2lyY2xlIGN4PSI1NzMiIGN5PSIxODYiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTAyIi8+PGNpcmNsZSBjeD0iNTM3IiBjeT0iNzgxIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwMSIvPjxjaXJjbGUgY3g9IjM2MiIgY3k9IjM3MCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDUiLz48Y2lyY2xlIGN4PSI0MDkiIGN5PSI3MzIiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDg5Ii8+PGNpcmNsZSBjeD0iMjU1IiBjeT0iNTAxIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjExMyIvPjxjaXJjbGUgY3g9IjUxMiIgY3k9IjUyNyIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOSIvPjxjaXJjbGUgY3g9IjQ2NSIgY3k9IjQ3MiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODEiLz48Y2lyY2xlIGN4PSI1NzAiIGN5PSI3NDEiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDc0Ii8+PGNpcmNsZSBjeD0iMjI3IiBjeT0iMzMyIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwOSIvPjxjaXJjbGUgY3g9IjI3NCIgY3k9Ijc5MSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTgiLz48L3N2Zz4=", "p3": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iODAwIiB2aWV3Qm94PSIwIDAgNjAwIDgwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWEyNDMwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGExMDFhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI4MDAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIyNDMiIGN5PSI2MDYiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDYzIi8+PGNpcmNsZSBjeD0iNDg1IiBjeT0iNjQwIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4NSIvPjxjaXJjbGUgY3g9IjQ4MCIgY3k9IjI2NSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDciLz48Y2lyY2xlIGN4PSI0ODEiIGN5PSI1NTMiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDY2Ii8+PGNpcmNsZSBjeD0iMTU0IiBjeT0iMjM3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwOCIvPjxjaXJjbGUgY3g9IjUzNSIgY3k9IjM5OSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOSIvPjxjaXJjbGUgY3g9IjY1IiBjeT0iMTYzIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA1NyIvPjxjaXJjbGUgY3g9IjMxIiBjeT0iMjc1IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4NCIvPjxjaXJjbGUgY3g9IjM5NiIgY3k9IjczMSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjYiLz48Y2lyY2xlIGN4PSI1OTAiIGN5PSI0NTUiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTA5Ii8+PGNpcmNsZSBjeD0iOTkiIGN5PSIzNiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzUiLz48Y2lyY2xlIGN4PSIyNjQiIGN5PSI2ODgiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMSIvPjxjaXJjbGUgY3g9IjMwOCIgY3k9IjQzMSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODIiLz48Y2lyY2xlIGN4PSI1NDYiIGN5PSI1OTkiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDgzIi8+PGNpcmNsZSBjeD0iMzQ0IiBjeT0iNjk4IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNyIvPjxjaXJjbGUgY3g9IjE2NyIgY3k9IjcxNSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMTciLz48Y2lyY2xlIGN4PSI1ODUiIGN5PSI1ODIiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk0Ii8+PGNpcmNsZSBjeD0iMjE2IiBjeT0iNjQ4IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA1NiIvPjxjaXJjbGUgY3g9IjY0IiBjeT0iNDkzIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzOCIvPjxjaXJjbGUgY3g9IjY4IiBjeT0iNDIwIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzMiIvPjwvc3ZnPg==", "p4": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgODAwIDYwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGQyYTFhIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMDgxNDEwIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIyNDEiIGN5PSIzMTAiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk1Ii8+PGNpcmNsZSBjeD0iNDkwIiBjeT0iMTU4IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzNiIvPjxjaXJjbGUgY3g9IjQxMSIgY3k9IjU2MiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMDIiLz48Y2lyY2xlIGN4PSI3ODMiIGN5PSI2MCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzciLz48Y2lyY2xlIGN4PSIzNjgiIGN5PSIyODMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTA0Ii8+PGNpcmNsZSBjeD0iMjY4IiBjeT0iMjE5IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNSIvPjxjaXJjbGUgY3g9IjI2NiIgY3k9IjI3OCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDUiLz48Y2lyY2xlIGN4PSIyOTYiIGN5PSIzODEiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTA2Ii8+PGNpcmNsZSBjeD0iMzQ1IiBjeT0iMzk3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0NiIvPjxjaXJjbGUgY3g9IjQ4NCIgY3k9IjI4NiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMTUiLz48Y2lyY2xlIGN4PSI1NjAiIGN5PSIzMDciIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTEyIi8+PGNpcmNsZSBjeD0iNTg2IiBjeT0iMzE5IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2NyIvPjxjaXJjbGUgY3g9IjYxMyIgY3k9IjI5NSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzEiLz48Y2lyY2xlIGN4PSIyMzgiIGN5PSIzMTIiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTAzIi8+PGNpcmNsZSBjeD0iNDQiIGN5PSI4MyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzIiLz48Y2lyY2xlIGN4PSIyODciIGN5PSI1MzEiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDkzIi8+PGNpcmNsZSBjeD0iMTQ4IiBjeT0iMjAwIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2NyIvPjxjaXJjbGUgY3g9IjIwNyIgY3k9IjQ1MSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDciLz48Y2lyY2xlIGN4PSI0NDYiIGN5PSIzMjgiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTExIi8+PGNpcmNsZSBjeD0iMTAzIiBjeT0iNjMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDU1Ii8+PC9zdmc+", "j1": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQiIGhlaWdodD0iMTQ0IiB2aWV3Qm94PSIwIDAgMTQ0IDE0NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMmExYTMwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTQwYTE4Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE0NCIgaGVpZ2h0PSIxNDQiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjkxIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNiIvPjxjaXJjbGUgY3g9IjYzIiBjeT0iMTMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQiLz48Y2lyY2xlIGN4PSIxMjAiIGN5PSI2MyIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzkiLz48Y2lyY2xlIGN4PSI2MyIgY3k9IjMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDY3Ii8+PGNpcmNsZSBjeD0iNDYiIGN5PSI5OSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOTkiLz48Y2lyY2xlIGN4PSIxOCIgY3k9IjM1IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0MSIvPjxjaXJjbGUgY3g9IjAiIGN5PSIxIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEiLz48Y2lyY2xlIGN4PSI0MiIgY3k9IjQyIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA1OCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMTM4IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0NiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iOTgiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDMyIi8+PGNpcmNsZSBjeD0iMTA2IiBjeT0iNDIiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDU0Ii8+PGNpcmNsZSBjeD0iODQiIGN5PSI3NyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODQiLz48Y2lyY2xlIGN4PSI4NiIgY3k9IjE2IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2MiIvPjxjaXJjbGUgY3g9Ijc4IiBjeT0iMTIzIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0NyIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9IjQ1IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA1MyIvPjxjaXJjbGUgY3g9IjUiIGN5PSI5MSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wMzIiLz48Y2lyY2xlIGN4PSIxMDciIGN5PSI5MyIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODIiLz48Y2lyY2xlIGN4PSIyIiBjeT0iMTE1IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5NCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMzAiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTE0Ii8+PGNpcmNsZSBjeD0iMTE4IiBjeT0iODgiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTEiLz48L3N2Zz4=", "j2": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQiIGhlaWdodD0iMTQ0IiB2aWV3Qm94PSIwIDAgMTQ0IDE0NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWEyYTQwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGExNDIwIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE0NCIgaGVpZ2h0PSIxNDQiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIyMCIgY3k9IjEyNCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wMzMiLz48Y2lyY2xlIGN4PSIzNyIgY3k9IjEyMCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTkiLz48Y2lyY2xlIGN4PSI1IiBjeT0iNjkiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTAyIi8+PGNpcmNsZSBjeD0iMTA1IiBjeT0iMTM3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0NyIvPjxjaXJjbGUgY3g9IjE0MSIgY3k9IjY3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNiIvPjxjaXJjbGUgY3g9Ijg1IiBjeT0iMjMiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTAyIi8+PGNpcmNsZSBjeD0iNjQiIGN5PSIxMTMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk4Ii8+PGNpcmNsZSBjeD0iNzQiIGN5PSIyNCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODMiLz48Y2lyY2xlIGN4PSI1MSIgY3k9IjkyIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjExNCIvPjxjaXJjbGUgY3g9IjQ5IiBjeT0iMTMxIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4NyIvPjxjaXJjbGUgY3g9IjYyIiBjeT0iMTEwIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2MiIvPjxjaXJjbGUgY3g9IjMwIiBjeT0iMjIiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQxIi8+PGNpcmNsZSBjeD0iNjgiIGN5PSI3OSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjQiLz48Y2lyY2xlIGN4PSI1NyIgY3k9IjM1IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNSIvPjxjaXJjbGUgY3g9IjEzMyIgY3k9IjMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMSIvPjxjaXJjbGUgY3g9IjQiIGN5PSI4NSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjQiLz48Y2lyY2xlIGN4PSIxMzUiIGN5PSI5OSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDEiLz48Y2lyY2xlIGN4PSIxMjUiIGN5PSIxMyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjgiLz48Y2lyY2xlIGN4PSIxMDEiIGN5PSIyNCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTIiLz48Y2lyY2xlIGN4PSIyMiIgY3k9IjExNCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMDEiLz48L3N2Zz4=", "j3": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQiIGhlaWdodD0iMTQ0IiB2aWV3Qm94PSIwIDAgMTQ0IDE0NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMzAyMDFhIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTgxMDBhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE0NCIgaGVpZ2h0PSIxNDQiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSI4MiIgY3k9IjM4IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4OSIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iMTM3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2MyIvPjxjaXJjbGUgY3g9IjE0IiBjeT0iMTI5IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzMyIvPjxjaXJjbGUgY3g9IjExMSIgY3k9IjEwNyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTIiLz48Y2lyY2xlIGN4PSIxNDEiIGN5PSIxMDgiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTA0Ii8+PGNpcmNsZSBjeD0iMzEiIGN5PSI1NyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODIiLz48Y2lyY2xlIGN4PSIxMDEiIGN5PSIxMiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wMzQiLz48Y2lyY2xlIGN4PSIzNCIgY3k9Ijc0IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0MyIvPjxjaXJjbGUgY3g9IjMwIiBjeT0iNzgiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDM5Ii8+PGNpcmNsZSBjeD0iNDgiIGN5PSI5NSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzkiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE0NCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODYiLz48Y2lyY2xlIGN4PSIxMjciIGN5PSIxMzYiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMSIvPjxjaXJjbGUgY3g9IjExOSIgY3k9IjExNiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTciLz48Y2lyY2xlIGN4PSI0NiIgY3k9IjYyIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4MiIvPjxjaXJjbGUgY3g9IjEzNCIgY3k9IjEyNiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOTYiLz48Y2lyY2xlIGN4PSI3MyIgY3k9IjE4IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3NiIvPjxjaXJjbGUgY3g9IjQyIiBjeT0iODciIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTE0Ii8+PGNpcmNsZSBjeD0iMTA3IiBjeT0iMTAiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk5Ii8+PGNpcmNsZSBjeD0iODAiIGN5PSI4NyIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODMiLz48Y2lyY2xlIGN4PSIxMTYiIGN5PSIxNyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMTUiLz48L3N2Zz4=", "j4": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQiIGhlaWdodD0iMTQ0IiB2aWV3Qm94PSIwIDAgMTQ0IDE0NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWEzMDI4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGExODEyIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE0NCIgaGVpZ2h0PSIxNDQiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSI1OCIgY3k9Ijk0IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0MSIvPjxjaXJjbGUgY3g9IjExIiBjeT0iMjEiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDUyIi8+PGNpcmNsZSBjeD0iMTI5IiBjeT0iNTMiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDg4Ii8+PGNpcmNsZSBjeD0iMTE3IiBjeT0iMTI0IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2NSIvPjxjaXJjbGUgY3g9IjQ5IiBjeT0iMTAzIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3NCIvPjxjaXJjbGUgY3g9IjUiIGN5PSI2OCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzMiLz48Y2lyY2xlIGN4PSI5NyIgY3k9IjI5IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzOSIvPjxjaXJjbGUgY3g9IjE2IiBjeT0iOTgiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQiLz48Y2lyY2xlIGN4PSIxNCIgY3k9Ijg2IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5MiIvPjxjaXJjbGUgY3g9IjEyNyIgY3k9IjEzMiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODIiLz48Y2lyY2xlIGN4PSIzNiIgY3k9IjE2IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3NCIvPjxjaXJjbGUgY3g9IjQ5IiBjeT0iMzciIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk2Ii8+PGNpcmNsZSBjeD0iMTEzIiBjeT0iNzMiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTA3Ii8+PGNpcmNsZSBjeD0iMTA5IiBjeT0iMzQiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk5Ii8+PGNpcmNsZSBjeD0iMjQiIGN5PSIxMzYiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDkzIi8+PGNpcmNsZSBjeD0iMTI2IiBjeT0iMTI4IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA1OCIvPjxjaXJjbGUgY3g9IjkxIiBjeT0iMTM1IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3NiIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iMTI5IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2MSIvPjxjaXJjbGUgY3g9IjMiIGN5PSI3NSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNSIvPjxjaXJjbGUgY3g9IjgiIGN5PSIxMDgiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDY0Ii8+PC9zdmc+", "e1": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMzIwIiB2aWV3Qm94PSIwIDAgMzIwIDMyMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMmExYTIwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTQwYTEwIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSIzMjAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIyMzciIGN5PSIzMTMiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDU0Ii8+PGNpcmNsZSBjeD0iOTUiIGN5PSIzIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3NSIvPjxjaXJjbGUgY3g9IjMwOSIgY3k9IjQxIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4Ii8+PGNpcmNsZSBjeD0iMzE1IiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQ1Ii8+PGNpcmNsZSBjeD0iMjMxIiBjeT0iMjE2IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0NSIvPjxjaXJjbGUgY3g9IjI2IiBjeT0iNTYiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDc2Ii8+PGNpcmNsZSBjeD0iMzAyIiBjeT0iMzIiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTAxIi8+PGNpcmNsZSBjeD0iNTIiIGN5PSIxNDkiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDkxIi8+PGNpcmNsZSBjeD0iMjE1IiBjeT0iNDQiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTEyIi8+PGNpcmNsZSBjeD0iMjAzIiBjeT0iMTQzIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwMyIvPjxjaXJjbGUgY3g9IjEwMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDM1Ii8+PGNpcmNsZSBjeD0iMTkzIiBjeT0iMjUxIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzMiIvPjxjaXJjbGUgY3g9IjIxNyIgY3k9IjU3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA0MSIvPjxjaXJjbGUgY3g9IjI5NiIgY3k9IjEwMSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNiIvPjxjaXJjbGUgY3g9IjQyIiBjeT0iNjgiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDc1Ii8+PGNpcmNsZSBjeD0iMjkzIiBjeT0iMjU0IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2OCIvPjxjaXJjbGUgY3g9IjIwMyIgY3k9Ijk4IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5MyIvPjxjaXJjbGUgY3g9Ijc0IiBjeT0iODgiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDM1Ii8+PGNpcmNsZSBjeD0iMjg0IiBjeT0iMzEwIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5NyIvPjxjaXJjbGUgY3g9IjI5NCIgY3k9IjE3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwOCIvPjwvc3ZnPg==", "e2": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMzIwIiB2aWV3Qm94PSIwIDAgMzIwIDMyMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWEyYTM4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGExNDE4Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSIzMjAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIyOTIiIGN5PSIxNiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzMiLz48Y2lyY2xlIGN4PSI3IiBjeT0iMTA1IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwMyIvPjxjaXJjbGUgY3g9IjE0MiIgY3k9IjgyIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3NyIvPjxjaXJjbGUgY3g9IjE2NyIgY3k9IjM4IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjExNiIvPjxjaXJjbGUgY3g9IjE4NCIgY3k9IjIyIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNyIvPjxjaXJjbGUgY3g9IjMwOCIgY3k9IjE4MSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjgiLz48Y2lyY2xlIGN4PSIxMzQiIGN5PSIyMzMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDkyIi8+PGNpcmNsZSBjeD0iMTg1IiBjeT0iNjgiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk5Ii8+PGNpcmNsZSBjeD0iMTIyIiBjeT0iMjI1IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzNCIvPjxjaXJjbGUgY3g9IjIiIGN5PSIxMjAiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQ4Ii8+PGNpcmNsZSBjeD0iMTU1IiBjeT0iMjc0IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5OSIvPjxjaXJjbGUgY3g9IjEyMiIgY3k9IjE2MCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjkiLz48Y2lyY2xlIGN4PSIzMyIgY3k9IjI5OSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMDYiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjExNCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTEiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjI1NCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMDQiLz48Y2lyY2xlIGN4PSIzNiIgY3k9IjI3MyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDMiLz48Y2lyY2xlIGN4PSIyOTAiIGN5PSIxOTEiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQiLz48Y2lyY2xlIGN4PSI0OSIgY3k9IjIyNiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMTgiLz48Y2lyY2xlIGN4PSI5NyIgY3k9IjE3OCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMTciLz48Y2lyY2xlIGN4PSIyMjgiIGN5PSIxMjUiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQzIi8+PC9zdmc+", "e3": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMzIwIiB2aWV3Qm94PSIwIDAgMzIwIDMyMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMjgyMDJhIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTQxMDFhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSIzMjAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIyMzEiIGN5PSIyODYiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDcxIi8+PGNpcmNsZSBjeD0iMzAwIiBjeT0iOTciIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTAyIi8+PGNpcmNsZSBjeD0iMjQzIiBjeT0iMzE0IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzOCIvPjxjaXJjbGUgY3g9IjE1NSIgY3k9IjcyIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3OCIvPjxjaXJjbGUgY3g9IjIxIiBjeT0iMzA0IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjExNyIvPjxjaXJjbGUgY3g9IjMxNSIgY3k9IjgwIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNSIvPjxjaXJjbGUgY3g9IjMyIiBjeT0iMzAiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQ3Ii8+PGNpcmNsZSBjeD0iMTIzIiBjeT0iMzA3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEiLz48Y2lyY2xlIGN4PSIxNjciIGN5PSIyMjUiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDc3Ii8+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMjU1IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5Ii8+PGNpcmNsZSBjeD0iMjM0IiBjeT0iMTQyIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEyIi8+PGNpcmNsZSBjeD0iNDIiIGN5PSIxMzAiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk4Ii8+PGNpcmNsZSBjeD0iMjYyIiBjeT0iMTQ3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzNiIvPjxjaXJjbGUgY3g9IjU1IiBjeT0iMjA1IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNiIvPjxjaXJjbGUgY3g9IjE5NyIgY3k9IjM0IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNiIvPjxjaXJjbGUgY3g9IjAiIGN5PSIxMDkiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTEzIi8+PGNpcmNsZSBjeD0iMjYiIGN5PSIyNDAiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTE4Ii8+PGNpcmNsZSBjeD0iMjAzIiBjeT0iMjE0IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4MSIvPjxjaXJjbGUgY3g9IjEwMSIgY3k9IjEzOCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wMzgiLz48Y2lyY2xlIGN4PSIxNzAiIGN5PSI3IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5OCIvPjwvc3ZnPg==", "e4": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMzIwIiB2aWV3Qm94PSIwIDAgMzIwIDMyMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMjAyYTFhIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTAxODBhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSIzMjAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIyNDIiIGN5PSIxMzciIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQzIi8+PGNpcmNsZSBjeD0iNSIgY3k9IjE5MSIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTUiLz48Y2lyY2xlIGN4PSIyMzUiIGN5PSIzMDciIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDgiLz48Y2lyY2xlIGN4PSIzMTkiIGN5PSI3NCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjMiLz48Y2lyY2xlIGN4PSIxNzMiIGN5PSIxMDciIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDgyIi8+PGNpcmNsZSBjeD0iMTAyIiBjeT0iMzgiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDkxIi8+PGNpcmNsZSBjeD0iNDQiIGN5PSI5IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwNCIvPjxjaXJjbGUgY3g9IjI2MCIgY3k9IjExNCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMTkiLz48Y2lyY2xlIGN4PSIyMTYiIGN5PSIyMjciIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDg5Ii8+PGNpcmNsZSBjeD0iNjkiIGN5PSIyNzYiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTA5Ii8+PGNpcmNsZSBjeD0iMjg1IiBjeT0iODMiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDgiLz48Y2lyY2xlIGN4PSIyNTkiIGN5PSI0MiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wODUiLz48Y2lyY2xlIGN4PSIzMDUiIGN5PSIyNDAiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDg1Ii8+PGNpcmNsZSBjeD0iMjc3IiBjeT0iMTUiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTE3Ii8+PGNpcmNsZSBjeD0iMTMzIiBjeT0iMTgyIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwOCIvPjxjaXJjbGUgY3g9IjE5NyIgY3k9IjE1OCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTMiLz48Y2lyY2xlIGN4PSIxNzEiIGN5PSIxODYiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDc2Ii8+PGNpcmNsZSBjeD0iMjU2IiBjeT0iOTEiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDY0Ii8+PGNpcmNsZSBjeD0iMjIwIiBjeT0iMTYiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDUiLz48Y2lyY2xlIGN4PSIyMTgiIGN5PSIyMiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDgiLz48L3N2Zz4=", "e5": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMzIwIiB2aWV3Qm94PSIwIDAgMzIwIDMyMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMmEyODIwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTQxMjEwIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSIzMjAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSIxMzIiIGN5PSIxNDgiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDg5Ii8+PGNpcmNsZSBjeD0iNzUiIGN5PSIxMTUiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQyIi8+PGNpcmNsZSBjeD0iMjcyIiBjeT0iMTA5IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzMyIvPjxjaXJjbGUgY3g9IjY0IiBjeT0iMzExIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjExOSIvPjxjaXJjbGUgY3g9Ijc1IiBjeT0iNDMiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTA0Ii8+PGNpcmNsZSBjeD0iMjIzIiBjeT0iNzEiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDYyIi8+PGNpcmNsZSBjeD0iMTE5IiBjeT0iMjQ5IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5Ii8+PGNpcmNsZSBjeD0iMjIwIiBjeT0iMTYwIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2MSIvPjxjaXJjbGUgY3g9IjMwNCIgY3k9IjEzNCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOCIvPjxjaXJjbGUgY3g9IjY5IiBjeT0iMjI1IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA3OCIvPjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMyIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzciLz48Y2lyY2xlIGN4PSIxMjkiIGN5PSIxOTAiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDU0Ii8+PGNpcmNsZSBjeD0iMTQzIiBjeT0iMjAyIiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4MiIvPjxjaXJjbGUgY3g9IjI4MSIgY3k9IjEyMCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMSIvPjxjaXJjbGUgY3g9IjE4NyIgY3k9IjY3IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2OSIvPjxjaXJjbGUgY3g9IjIzNyIgY3k9IjE5OSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOTUiLz48Y2lyY2xlIGN4PSIyMiIgY3k9IjExNSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzUiLz48Y2lyY2xlIGN4PSIyMjciIGN5PSIxMjkiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDk2Ii8+PGNpcmNsZSBjeD0iMTI4IiBjeT0iMTc5IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA5MyIvPjxjaXJjbGUgY3g9IjE5MSIgY3k9IjI2NiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4xMTEiLz48L3N2Zz4=", "e6": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMzIwIiB2aWV3Qm94PSIwIDAgMzIwIDMyMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWEyMDJhIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGExMDE4Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSIzMjAiIGZpbGw9InVybCgjZykiLz48Y2lyY2xlIGN4PSI1NCIgY3k9IjMxNSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNTQiLz48Y2lyY2xlIGN4PSIxMzAiIGN5PSIxNDkiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDg5Ii8+PGNpcmNsZSBjeD0iMTU1IiBjeT0iMjM4IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA2NSIvPjxjaXJjbGUgY3g9IjYwIiBjeT0iMTM0IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwOCIvPjxjaXJjbGUgY3g9IjE2MSIgY3k9IjE4MyIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjIiLz48Y2lyY2xlIGN4PSIyNjQiIGN5PSI3NiIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOCIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9Ijg0IiByPSIxIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjA4OSIvPjxjaXJjbGUgY3g9IjYyIiBjeT0iMzA0IiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjAzMyIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9IjEwNCIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNjYiLz48Y2lyY2xlIGN4PSIyMjQiIGN5PSIzMTEiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMTA5Ii8+PGNpcmNsZSBjeD0iNTciIGN5PSIyOTYiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDQ2Ii8+PGNpcmNsZSBjeD0iNDgiIGN5PSIyNDkiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDU0Ii8+PGNpcmNsZSBjeD0iMzE5IiBjeT0iMTExIiByPSIyIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjEwMiIvPjxjaXJjbGUgY3g9IjI1NiIgY3k9IjEzMCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDEiLz48Y2lyY2xlIGN4PSI0NSIgY3k9IjE0MiIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNDEiLz48Y2lyY2xlIGN4PSI4MiIgY3k9IjIxMCIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wOTIiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSI0NyIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzMiLz48Y2lyY2xlIGN4PSI4NiIgY3k9IjI3MyIgcj0iMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4wNzEiLz48Y2lyY2xlIGN4PSIyNDgiIGN5PSIyMzUiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDY4Ii8+PGNpcmNsZSBjeD0iNDgiIGN5PSIxMzEiIHI9IjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMDY1Ii8+PC9zdmc+"};
+    document.querySelectorAll('img[data-img]').forEach(function(el) {
+      var key = el.getAttribute('data-img');
+      if (IMGS[key]) { el.src = IMGS[key]; el.style.background = 'transparent'; }
+    });
 
-      function tick() {
-        var elapsed = Date.now() - start;
-        var pct = Math.min(elapsed / DUR, 1);
-        var count = Math.round(pct * 100);
-        countEl.textContent = String(count).padStart(3, '0');
-        barEl.style.transform = 'scaleX(' + pct + ')';
-        if (pct < 1) { requestAnimationFrame(tick); }
-        else {
-          setTimeout(function() {
-            el.classList.add('done');
-            setTimeout(function() { el.style.display = 'none'; }, 600);
-          }, 400);
+    // ── Loading screen: rAF counter 000→100 over 2700ms ──
+    (function() {
+      var loader = document.getElementById('loader');
+      var countEl = document.getElementById('count');
+      var bar = document.getElementById('loadbar');
+      var words = [].slice.call(document.querySelectorAll('.loader-words span'));
+      var DUR = 2700;
+      var wi = 0;
+      function showWord(i) {
+        words.forEach(function(w, idx) {
+          w.style.opacity = idx === i ? '1' : '0';
+          w.style.transform = idx === i ? 'translateY(0)' : 'translateY(20px)';
+        });
+      }
+      var wordTimer = setInterval(function() { wi = (wi + 1) % words.length; showWord(wi); }, 900);
+      var start = null;
+      function frame(t) {
+        if (start === null) start = t;
+        var p = Math.min((t - start) / DUR, 1);
+        var n = Math.round(p * 100);
+        countEl.textContent = String(n).padStart(3, '0');
+        bar.style.transform = 'scaleX(' + (n / 100) + ')';
+        if (p >= 1) {
+          clearInterval(wordTimer);
+          setTimeout(function() { loader.classList.add('done'); }, 400);
+        } else {
+          requestAnimationFrame(frame);
         }
       }
-      // Word cycling
-      setInterval(function() {
-        words.forEach(function(w, i) {
-          w.classList.toggle('active', i === (wi + 1) % words.length);
-          w.classList.toggle('exit', i === wi);
-        });
-        wi = (wi + 1) % words.length;
-        setTimeout(function() {
-          words.forEach(function(w) { w.classList.remove('exit'); });
-        }, 400);
-      }, wordInterval);
-      words[0].classList.add('active');
-      requestAnimationFrame(tick);
+      requestAnimationFrame(frame);
     })();
 
-    // ───── Navbar scroll effect ─────
-    (function navScroll() {
+    // ── Hero role cycling every 2s ──
+    (function() {
+      var roles = ['Builder', 'Engineer', 'Learner', 'Maker'];
+      var el = document.getElementById('roleWord');
+      var i = 0;
+      setInterval(function() {
+        i = (i + 1) % roles.length;
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.textContent = roles[i];
+        el.style.animation = 'role-fade-in 0.4s ease-out';
+      }, 2000);
+    })();
+
+    // ── Navbar scroll effect ──
+    (function() {
       var pill = document.getElementById('navPill');
       var links = [].slice.call(document.querySelectorAll('.nav-link'));
       var sections = ['home', 'work', 'journal', 'contact'];
       window.addEventListener('scroll', function() {
         pill.classList.toggle('scrolled', window.scrollY > 100);
-        // Active nav link
         var scrollY = window.scrollY + 200;
         var active = 'home';
         sections.forEach(function(id) {
@@ -580,128 +752,104 @@
         links.forEach(function(l) {
           l.classList.toggle('active', l.getAttribute('href') === '#' + active);
         });
-      });
+      }, { passive: true });
     })();
 
-    // ───── Role cycling ─────
-    (function roleCycle() {
-      var roleEl = document.getElementById('roleWord');
-      var roles = ['Builder', 'Engineer', 'Learner', 'Maker'];
-      var ri = 0;
-      setInterval(function() {
-        ri = (ri + 1) % roles.length;
-        roleEl.style.animation = 'none';
-        roleEl.offsetHeight;
-        roleEl.textContent = roles[ri];
-        roleEl.style.animation = 'role-fade-in 0.4s ease-out';
-      }, 2000);
-    })();
-
-    // ───── Reveal on scroll ─────
-    (function revealObs() {
+    // ── Reveal on scroll (IntersectionObserver) ──
+    (function() {
       var els = [].slice.call(document.querySelectorAll('.reveal'));
       if (!('IntersectionObserver' in window)) {
         els.forEach(function(el) { el.classList.add('in'); });
         return;
       }
       var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
-      }, { threshold: 0.15 });
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.1, rootMargin: '-60px' });
       els.forEach(function(el) { obs.observe(el); });
     })();
 
-    // ───── Hero HLS video ─────
-    (function initVideo() {
+    // ── HLS video init ──
+    (function() {
       var vid = document.getElementById('heroVideo');
-      if (vid && vid.canPlayType && !vid.canPlayType('application/vnd.apple.mpegurl')) {
+      if (vid && !vid.canPlayType('application/vnd.apple.mpegurl')) {
         var src = vid.querySelector('source').src;
-        var script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
-        script.onload = function() {
-          if (Hls.isSupported()) { var hls = new Hls(); hls.loadSource(src); hls.attachMedia(vid); }
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+        s.onload = function() {
+          if (Hls.isSupported()) { var h = new Hls(); h.loadSource(src); h.attachMedia(vid); }
         };
-        document.head.appendChild(script);
+        document.head.appendChild(s);
       }
     })();
 
-    // ───── Marquee ─────
-    (function marquee() {
+    // ── Footer marquee (rAF translateX loop) ──
+    (function() {
       var track = document.getElementById('marqueeTrack');
       var text = 'BUILDING THE FUTURE • ';
       var html = '';
-      for (var i = 0; i < 14; i++) html += '<span>' + text + '</span>';
-      track.innerHTML = html;
+      for (var i = 0; i < 12; i++) html += '<span>' + text + '</span>';
+      track.innerHTML = html + html;
       var x = 0;
-      var speed = 0.8;
-      function loop() {
-        x -= speed;
-        if (Math.abs(x) >= track.children[0].offsetWidth + 32) x = 0;
+      var half = 0;
+      function measure() { half = track.scrollWidth / 2; }
+      measure();
+      window.addEventListener('resize', measure);
+      function tick() {
+        x -= 0.6;
+        if (half && -x >= half) x += half;
         track.style.transform = 'translateX(' + x + 'px)';
-        requestAnimationFrame(loop);
+        requestAnimationFrame(tick);
       }
-      loop();
+      requestAnimationFrame(tick);
     })();
 
-    // ───── Parallax ─────
-    (function parallax() {
-      var cols = [document.getElementById('pcol1'), document.getElementById('pcol2')];
-      var cards1 = cols[0] ? [].slice.call(cols[0].querySelectorAll('.pcard')) : [];
-      var cards2 = cols[1] ? [].slice.call(cols[1].querySelectorAll('.pcard')) : [];
+    // ── Parallax ──
+    (function() {
       var section = document.querySelector('.explore');
-      if (!section) return;
+      var cards = [].slice.call(document.querySelectorAll('.parallax-cols .pcard'));
+      cards.forEach(function(c) {
+        var m = (c.getAttribute('style') || '').match(/rotate\(([-\d.]+)deg\)/);
+        c.setAttribute('data-rot', m ? m[1] : '0');
+      });
       function onScroll() {
+        if (!section) return;
         var rect = section.getBoundingClientRect();
-        var progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (rect.height - window.innerHeight)));
-        cards1.forEach(function(c, i) { c.style.transform = 'translateY(' + (progress * -80 + i * 20) + 'px) rotate(-3deg)'; });
-        cards2.forEach(function(c, i) { c.style.transform = 'translateY(' + (progress * 60 - i * 15) + 'px) rotate(2deg)'; });
+        var total = rect.height - window.innerHeight;
+        var prog = Math.min(Math.max(-rect.top / total, 0), 1);
+        cards.forEach(function(c, idx) {
+          var col = c.closest('.pcol');
+          var dir = (col && col.matches('#pcol2')) ? 1 : -1;
+          var speed = 100 + (idx % 3) * 60;
+          c.style.transform = 'translateY(' + (prog * speed * dir) + 'px) rotate(' + c.getAttribute('data-rot') + 'deg)';
+        });
       }
       window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     })();
 
-    // ───── Lightbox ─────
-    (function lightbox() {
+    // ── Lightbox ──
+    (function() {
       var lb = document.getElementById('lightbox');
-      var img = document.getElementById('lightboxImg');
-      document.addEventListener('click', function(e) {
-        var card = e.target.closest('.pcard canvas');
-        if (card && lb && img) {
-          img.src = card.toDataURL ? card.toDataURL() : '';
-          lb.classList.add('open');
-        }
+      var lbImg = document.getElementById('lightboxImg');
+      document.querySelectorAll('.pcard').forEach(function(c) {
+        c.addEventListener('click', function() {
+          var img = c.querySelector('img');
+          if (img) { lbImg.src = img.src; lb.classList.add('open'); }
+        });
       });
     })();
 
-    // ───── Project backgrounds (Canvas gradients) ─────
-    function drawGradient(id, colors) {
-      var c = document.getElementById(id);
-      if (!c) return;
-      var ctx = c.getContext('2d');
-      var w = c.width, h = c.height;
-      var grd = ctx.createLinearGradient(0, 0, w, h);
-      colors.forEach(function(stop, i) { grd.addColorStop(i / (colors.length - 1), stop); });
-      ctx.fillStyle = grd;
-      ctx.fillRect(0, 0, w, h);
-      // overlay pattern
-      ctx.fillStyle = 'rgba(0,0,0,0.15)';
-      for (var x = 0; x < w; x += 8) { for (var y = 0; y < h; y += 8) { if ((x + y) % 16 === 0) ctx.fillRect(x, y, 1, 1); } }
-    }
-    // Project cards
-    drawGradient('projBg1', ['#1a2a3a', '#0d1820', '#09121a']); // dark blue for VFS
-    drawGradient('projBg2', ['#1a2a30', '#0d1a20', '#0a1418']); // teal-dark for Helio
-    drawGradient('projBg3', ['#1a2430', '#0d1520', '#09101a']); // neutral for GenAI
-    drawGradient('projBg4', ['#1a3020', '#0d2018', '#091812']); // green-dark for land records
-    // Journal cards
-    drawGradient('journalImg1', ['#2a1a30', '#1a0d20', '#140a18']);
-    drawGradient('journalImg2', ['#1a2a40', '#0d1a30', '#0a1420']);
-    drawGradient('journalImg3', ['#30201a', '#20150d', '#18100a']);
-    drawGradient('journalImg4', ['#1a3028', '#0d2018', '#0a1812']);
-    // Exploration cards
-    drawGradient('expCard1', ['#2a1a20', '#1a0d14', '#140a10']);
-    drawGradient('expCard2', ['#1a2a38', '#0d1a24', '#0a1418']);
-    drawGradient('expCard3', ['#28202a', '#1a1420', '#14101a']);
-    drawGradient('expCard4', ['#202a1a', '#14200d', '#10180a']);
-    drawGradient('expCard5', ['#2a2820', '#1a1814', '#141210']);
-    drawGradient('expCard6', ['#1a202a', '#0d1420', '#0a1018']);
+    // ── Active nav link on hash click ──
+    (function() {
+      document.querySelectorAll('.nav-link').forEach(function(l) {
+        l.addEventListener('click', function() {
+          document.querySelectorAll('.nav-link').forEach(function(x) { x.classList.remove('active'); });
+          l.classList.add('active');
+        });
+      });
+    })();
   </script>
 </body>
 </html>
