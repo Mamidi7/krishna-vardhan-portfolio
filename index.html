@@ -34,6 +34,30 @@
     }
     img { display: block; max-width: 100%; }
     button, a { font: inherit; color: inherit; cursor: pointer; text-decoration: none; }
+    /* Keyboard focus */
+    :focus-visible {
+      outline: 2px solid var(--grad-2);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible, .nav-link:focus-visible {
+      border-radius: 4px;
+    }
+    .btn:focus-visible, .view-all:focus-visible, .email-btn:focus-visible {
+      outline-offset: 4px;
+      border-radius: 999px;
+    }
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .proj-img img { transform: none !important; }
+    }
+    /* Anchor scroll offset */
+    section[id] { scroll-margin-top: 100px; }
 
     .font-display { font-family: 'Instrument Serif', serif; font-style: italic; }
     .muted { color: hsl(var(--muted)); }
@@ -148,7 +172,7 @@
     .hero-role { font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-bottom: 8px; }
     .hero-role .role-word { display: inline-block; }
     .hero-desc {
-      font-size: 0.95rem; max-width: 32rem; margin: 16px auto 48px; line-height: 1.65; color: hsl(var(--muted));
+      font-size: 1rem; max-width: 32rem; margin: 16px auto 48px; line-height: 1.7; color: hsl(var(--muted));
     }
     .cta-row { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
     .btn {
@@ -205,8 +229,8 @@
     }
     .proj-info h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; }
     .proj-info .proj-desc-text {
-      font-size: 0.82rem; color: hsl(var(--muted)); margin-top: 6px; line-height: 1.5;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+      font-size: 0.85rem; color: hsl(var(--muted)); margin-top: 6px; line-height: 1.55;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
     }
     .proj-info .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
     .proj-info .tags span {
@@ -253,9 +277,9 @@
       background: hsl(var(--surface));
     }
     .entry .body { flex: 1; min-width: 0; }
-    .entry .body h3 { font-size: 1.1rem; font-weight: 500; letter-spacing: -0.01em; }
+    .entry .body h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; }
     .entry .body .entry-summary {
-      font-size: 0.82rem; color: hsl(var(--muted)); margin-top: 4px; line-height: 1.5;
+      font-size: 0.85rem; color: hsl(var(--muted)); margin-top: 4px; line-height: 1.55;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
     .entry .meta { display: flex; gap: 16px; color: hsl(var(--muted)); font-size: 0.78rem; margin-top: 6px; }
@@ -359,12 +383,35 @@
     }
     #lightbox.open { display: grid; }
     #lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .lb-close {
+      position: absolute; top: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; font-size: 1.5rem; cursor: pointer; z-index: 10;
+      display: grid; place-items: center; transition: background 0.2s;
+    }
+    .lb-close:hover { background: rgba(255,255,255,0.15); }
 
     /* ─── Responsive fine-tune ─── */
     @media (max-width: 767px) {
       .hero-name { font-size: clamp(3rem, 14vw, 5rem); }
       .nav-pill { padding: 6px; }
       .nav-link, .say-hi { padding: 6px 12px; font-size: 0.78rem; }
+      .hero-desc { max-width: 90%; margin-left: auto; margin-right: auto; }
+      .bento { gap: 16px; }
+      .proj-info h3 { font-size: 1rem; }
+      .proj-info .proj-desc-text { -webkit-line-clamp: 2; }
+      .entry { border-radius: 28px; padding: 14px; gap: 16px; }
+      .entry .body h3 { font-size: 1rem; }
+      .entry .entry-summary { -webkit-line-clamp: 2; }
+      .stat .num { font-size: clamp(2.4rem, 12vw, 3.5rem); }
+      .sec-head h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+      .parallax-cols { gap: 16px; padding: 0 12px; }
+      .pcard { max-width: 160px; }
+      .email-btn .inner { font-size: 0.85rem; padding: 0 16px; height: 44px; }
+      .footer-bar { flex-direction: column; text-align: center; gap: 16px; }
+      #lightbox { padding: 16px; }
+      #lightbox img { max-width: 100vw; max-height: 80vh; border-radius: 12px; }
+      .lb-close { top: 12px; right: 12px; width: 40px; height: 40px; font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -390,7 +437,7 @@
     <div class="overlay"></div>
     <div class="bottom-fade"></div>
 
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main">
       <div class="nav-pill" id="navPill">
         <a class="logo" href="#home"><span class="font-display">KV</span></a>
         <span class="nav-divider"></span>
@@ -413,8 +460,8 @@
         Every project here solves a real constraint, not a hypothetical one.
       </p>
       <div class="cta-row">
-        <a class="btn btn-solid" href="#work">See Works</a>
-        <a class="btn btn-outline" href="#contact">Reach out...</a>
+        <a class="btn btn-solid" href="#work" aria-label="View selected works">See Works</a>
+        <a class="btn btn-outline" href="#contact" aria-label="Get in touch">Reach out...</a>
       </div>
     </div>
 
@@ -710,7 +757,7 @@
   </section>
 
   <!-- ─── LIGHTBOX ─── -->
-  <div id="lightbox" onclick="this.classList.remove('open')"><img id="lightboxImg" alt=""></div>
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview" onclick="this.classList.remove('open')"><button class="lb-close" onclick="document.getElementById('lightbox').classList.remove('open')" aria-label="Close preview">×</button><img id="lightboxImg" alt="Enlarged preview"></div>
 
   <script>
     // ── Inline SVG data URIs — unique art per card ──
@@ -869,23 +916,32 @@
           if (img) { lbImg.src = img.src; lb.classList.add('open'); }
         });
       });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') lb.classList.remove('open');
+      });
     })();
 
-    // ── Animated stat counters ──
+    // ── Animated stat counters (smooth rAF) ──
     (function() {
       var nums = [].slice.call(document.querySelectorAll('.stat .num[data-target]'));
+      if (!nums.length) return;
       var obs = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
           if (!e.isIntersecting) return;
           var el = e.target;
           var target = parseInt(el.getAttribute('data-target'), 10);
-          var current = 0;
-          var step = Math.max(1, Math.floor(target / 60));
-          var timer = setInterval(function() {
-            current += step;
-            if (current >= target) { current = target; clearInterval(timer); }
-            el.textContent = current + (target >= 10 ? '+' : '');
-          }, 30);
+          var start = null;
+          var duration = 1600;
+          el.textContent = '0';
+          function frame(t) {
+            if (start === null) start = t;
+            var p = Math.min((t - start) / duration, 1);
+            var eased = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
+            var val = Math.round(eased * target);
+            el.textContent = val + '+';
+            if (p < 1) requestAnimationFrame(frame);
+          }
+          requestAnimationFrame(frame);
           obs.unobserve(el);
         });
       }, { threshold: 0.5 });
