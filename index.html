@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Krishna Vardhan — Data Engineer & Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: 0 0% 4%;
+      --surface: 0 0% 8%;
+      --text: 0 0% 96%;
+      --muted: 0 0% 53%;
+      --stroke: 0 0% 12%;
+      --accent: 0 0% 96%;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: hsl(var(--bg));
+      color: hsl(var(--text));
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img, video { display: block; max-width: 100%; }
+    button, a { font: inherit; color: inherit; cursor: pointer; text-decoration: none; }
+
+    .font-display { font-family: 'Instrument Serif', serif; font-style: italic; }
+    .muted { color: hsl(var(--muted)); }
+    .eyebrow { font-size: 0.72rem; color: hsl(var(--muted)); text-transform: uppercase; letter-spacing: 0.3em; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .accent-gradient { background: linear-gradient(90deg, #89AACC 0%, #4E85BF 100%); }
+
+    @keyframes scroll-down { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
+    @keyframes role-fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
+
+    /* ───── LOADING SCREEN ───── */
+    #loader {
+      position: fixed; inset: 0; z-index: 9999; background: hsl(var(--bg));
+      transition: opacity 0.6s ease;
+    }
+    #loader.done { opacity: 0; pointer-events: none; }
+    .loader-label { position: absolute; top: 32px; left: 32px; }
+    .loader-words {
+      position: absolute; inset: 0; display: grid; place-items: center;
+    }
+    .loader-words span {
+      position: absolute; font-size: clamp(2.2rem, 7vw, 4.5rem);
+      color: hsl(var(--text) / 0.8); opacity: 0; transition: opacity 0.4s, transform 0.4s;
+    }
+    .loader-words span.active { opacity: 1; transform: translateY(0); }
+    .loader-words span.exit { opacity: 0; transform: translateY(-20px); }
+    .loader-count {
+      position: absolute; bottom: 48px; right: 40px;
+      font-size: clamp(4rem, 14vw, 9rem); line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .loader-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: hsl(var(--stroke) / 0.5); }
+    .loader-bar > div {
+      height: 100%; transform-origin: left; transform: scaleX(0);
+      box-shadow: 0 0 8px rgba(137,170,204,0.35);
+    }
+
+    /* ───── HERO ───── */
+    .hero { position: relative; min-height: 100vh; display: grid; place-items: center; overflow: hidden; }
+    .hero video, .hero .video-fallback {
+      position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
+      transform: translate(-50%, -50%); object-fit: cover; z-index: 0;
+    }
+    .video-fallback {
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 30% 20%, #16243a 0%, #060810 55%, #020308 100%);
+    }
+    .hero .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.2); z-index: 1; }
+    .hero .bottom-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 192px; background: linear-gradient(to top, hsl(var(--bg)), transparent); z-index: 1; }
+
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; justify-content: center; padding: 24px 16px; }
+    .nav-pill {
+      display: inline-flex; align-items: center; gap: 2px; border-radius: 999px;
+      backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1);
+      background: hsl(var(--surface)); padding: 8px; transition: box-shadow 0.4s ease;
+    }
+    .nav-pill.scrolled { box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .logo {
+      position: relative; width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; transition: transform 0.3s ease;
+    }
+    .logo::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%; padding: 2px;
+      background: linear-gradient(90deg, #89AACC 0%, #4E85BF 100%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; transition: transform 0.5s ease;
+    }
+    .logo:hover { transform: scale(1.1); }
+    .logo:hover::before { transform: rotate(180deg); }
+    .logo span {
+      position: relative; z-index: 1; width: 30px; height: 30px; border-radius: 50%;
+      background: hsl(var(--bg)); display: grid; place-items: center; font-size: 13px;
+    }
+    .nav-divider { width: 1px; height: 20px; background: hsl(var(--stroke)); margin: 0 4px; }
+    .nav-link, .say-hi {
+      font-size: 0.85rem; border-radius: 999px; padding: 8px 16px; transition: all 0.3s ease;
+    }
+    .nav-link.active { color: hsl(var(--text)); background: hsl(var(--stroke) / 0.5); }
+    .nav-link:not(.active) { color: hsl(var(--muted)); }
+    .nav-link:not(.active):hover { color: hsl(var(--text)); background: hsl(var(--stroke) / 0.5); }
+    .say-hi { position: relative; display: inline-flex; align-items: center; gap: 4px; }
+    .say-hi .ring {
+      position: absolute; inset: -2px; border-radius: 999px; opacity: 0;
+      background: linear-gradient(90deg, #89AACC 0%, #4E85BF 100%); transition: opacity 0.3s ease;
+    }
+    .say-hi:hover .ring { opacity: 1; }
+    .say-hi .inner {
+      position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 4px;
+      background: hsl(var(--surface)); backdrop-filter: blur(12px); border-radius: 999px; padding: 8px 16px;
+    }
+
+    .hero-content { position: relative; z-index: 10; text-align: center; padding: 0 24px; }
+    .hero-eyebrow { display: block; margin-bottom: 32px; }
+    .hero-name {
+      font-size: clamp(3.5rem, 12vw, 9rem); line-height: 0.9; letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+    .hero-role { font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-bottom: 8px; }
+    .hero-role .role-word { display: inline-block; animation: role-fade-in 0.4s ease-out; }
+    .hero-desc { font-size: 0.95rem; max-width: 28rem; margin: 16px auto 48px; line-height: 1.6; color: hsl(var(--muted)); }
+    .cta-row { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .btn { position: relative; border-radius: 999px; font-size: 0.9rem; padding: 14px 28px; transition: transform 0.3s ease; display: inline-block; }
+    .btn:hover { transform: scale(1.05); }
+    .btn-solid { background: hsl(var(--text)); color: hsl(var(--bg)); }
+    .btn-outline { border: 2px solid hsl(var(--stroke)); background: hsl(var(--bg)); color: hsl(var(--text)); }
+
+    .scroll-ind { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 10; text-align: center; }
+    .scroll-ind .lbl { font-size: 0.7rem; letter-spacing: 0.2em; color: hsl(var(--muted)); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .scroll-ind .track { width: 1px; height: 40px; background: hsl(var(--stroke)); margin: 0 auto; overflow: hidden; position: relative; }
+    .scroll-ind .track > i { display: block; width: 1px; height: 100%; background: hsl(var(--text)); animation: scroll-down 1.5s ease-in-out infinite; }
+
+    /* ───── REVEAL ───── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.25,0.1,0.25,1), transform 1s cubic-bezier(0.25,0.1,0.25,1); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ───── SECTION HEADER ───── */
+    .sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 48px; flex-wrap: wrap; }
+    .sec-head .line { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .sec-head .line .bar { width: 32px; height: 1px; background: hsl(var(--stroke)); }
+    .sec-head h2 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; letter-spacing: -0.02em; }
+    .sec-head p { color: hsl(var(--muted)); font-size: 0.95rem; max-width: 30rem; margin-top: 16px; }
+
+    /* ───── WORKS BENTO ───── */
+    .works { padding: 48px 0; }
+    .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+    .proj { position: relative; border: 1px solid hsl(var(--stroke)); background: hsl(var(--surface)); border-radius: 24px; overflow: hidden; cursor: pointer; grid-column: span 12; }
+    .proj-img { position: relative; width: 100%; height: 100%; min-height: 200px; }
+    .proj-img canvas, .proj-img .proj-placeholder {
+      width: 100%; height: 100%; position: absolute; inset: 0;
+      display: grid; place-items: center; color: hsl(var(--muted)); font-size: 0.9rem;
+    }
+    .proj-img .proj-bg {
+      width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
+    }
+    .proj:hover .proj-img .proj-bg { transform: scale(1.05); }
+    .proj .halftone {
+      position: absolute; inset: 0; opacity: 0.2; mix-blend-mode: multiply; pointer-events: none;
+      background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 4px 4px;
+    }
+    .proj .hover-layer {
+      position: absolute; inset: 0; display: grid; place-items: center; opacity: 0;
+      background: hsl(var(--bg) / 0.7); backdrop-filter: blur(16px); transition: opacity 0.4s ease;
+    }
+    .proj:hover .hover-layer { opacity: 1; }
+    .proj-label {
+      position: relative; display: inline-flex; align-items: center; gap: 6px;
+      background: #fff; color: #111; border-radius: 999px; padding: 10px 20px; font-size: 0.9rem;
+    }
+    .proj-label::before {
+      content: ''; position: absolute; inset: -2px; border-radius: 999px; z-index: -1;
+      background: linear-gradient(90deg, #89AACC, #4E85BF, #89AACC); background-size: 200% 100%;
+      animation: gradient-shift 6s ease infinite;
+    }
+    .proj-desc {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; z-index: 2;
+      background: linear-gradient(to top, hsl(var(--surface)) 60%, transparent);
+    }
+    .proj-desc h3 { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+    .proj-desc .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .proj-desc .tags span {
+      font-size: 0.7rem; padding: 3px 8px; border-radius: 99px;
+      background: hsl(var(--stroke) / 0.5); color: hsl(var(--muted));
+    }
+    @media (min-width: 768px) {
+      .proj:nth-child(1) { grid-column: span 7; aspect-ratio: 4/3; }
+      .proj:nth-child(2) { grid-column: span 5; aspect-ratio: 3/4; }
+      .proj:nth-child(3) { grid-column: span 5; aspect-ratio: 3/4; }
+      .proj:nth-child(4) { grid-column: span 7; aspect-ratio: 4/3; }
+    }
+    @media (max-width: 767px) { .proj { aspect-ratio: 4/3; } }
+
+    /* ───── JOURNAL ───── */
+    .journal { padding: 64px 0; }
+    .entries { display: flex; flex-direction: column; gap: 16px; }
+    .entry {
+      display: flex; align-items: center; gap: 24px; padding: 16px;
+      background: hsl(var(--surface) / 0.3); border: 1px solid hsl(var(--stroke));
+      border-radius: 40px; transition: background 0.3s ease;
+    }
+    .entry:hover { background: hsl(var(--surface)); }
+    .entry .entry-img {
+      width: 72px; height: 72px; border-radius: 24px; flex: 0 0 auto;
+      overflow: hidden; background: hsl(var(--surface));
+    }
+    .entry .entry-img canvas { width: 100%; height: 100%; }
+    .entry .body { flex: 1; min-width: 0; }
+    .entry .body h3 { font-size: 1.15rem; font-weight: 500; letter-spacing: -0.01em; }
+    .entry .body p { font-size: 0.82rem; color: hsl(var(--muted)); margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .entry .meta { display: flex; gap: 16px; color: hsl(var(--muted)); font-size: 0.8rem; margin-top: 6px; }
+    .entry .date { color: hsl(var(--muted)); font-size: 0.8rem; white-space: nowrap; }
+    @media (max-width: 767px) { .entry { border-radius: 28px; } }
+
+    /* ───── EXPLORATIONS ───── */
+    .explore { position: relative; min-height: 300vh; }
+    .explore-pin {
+      position: sticky; top: 0; height: 100vh; display: grid; place-items: center;
+      text-align: center; z-index: 10; pointer-events: none;
+    }
+    .explore-pin .inner { pointer-events: auto; }
+    .explore-pin h2 { font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1.05; margin: 16px 0; }
+    .explore-btn {
+      display: inline-flex; align-items: center; gap: 8px; border: 1px solid hsl(var(--stroke));
+      border-radius: 999px; padding: 12px 22px; font-size: 0.9rem; margin-top: 16px;
+      transition: border-color 0.3s;
+    }
+    .explore-btn:hover { border-color: hsl(var(--muted)); }
+    .parallax-cols {
+      position: absolute; inset: 0; z-index: 20; display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; max-width: 1400px; margin: 0 auto; padding: 0 32px; pointer-events: none;
+    }
+    .pcol { display: flex; flex-direction: column; gap: 80px; padding-top: 30vh; }
+    .pcol:nth-child(2) { padding-top: 55vh; }
+    .pcard {
+      aspect-ratio: 1; max-width: 320px; width: 100%; border-radius: 20px; overflow: hidden;
+      border: 1px solid hsl(var(--stroke)); pointer-events: auto; cursor: pointer; will-change: transform;
+      position: relative; background: hsl(var(--surface));
+    }
+    .pcard canvas { width: 100%; height: 100%; }
+    .pcol:nth-child(2) .pcard { margin-left: auto; }
+    @media (max-width: 767px) { .parallax-cols { gap: 20px; padding: 0 16px; } }
+
+    /* ───── STATS ───── */
+    .stats { padding: 64px 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .stat .num { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1; }
+    .stat .lbl { color: hsl(var(--muted)); font-size: 0.85rem; margin-top: 12px; }
+    @media (max-width: 767px) { .stats-grid { grid-template-columns: 1fr; gap: 24px; text-align: center; } }
+
+    /* ───── CONTACT / FOOTER ───── */
+    .contact { position: relative; padding: 64px 0 48px; overflow: hidden; }
+    .contact .bgvid, .contact .video-fallback {
+      position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
+      transform: translate(-50%, -50%) scaleY(-1); object-fit: cover; z-index: 0;
+    }
+    .contact .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); z-index: 1; }
+    .contact .inner { position: relative; z-index: 2; }
+    .marquee { overflow: hidden; white-space: nowrap; margin: 32px 0 48px; }
+    .marquee .track { display: inline-flex; will-change: transform; gap: 32px; }
+    .marquee span { font-size: clamp(2rem, 6vw, 4rem); color: hsl(var(--text) / 0.85); white-space: nowrap; }
+    .contact-cta { text-align: center; }
+    .email-btn {
+      position: relative; display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 999px; padding: 16px 32px; font-size: 1rem; transition: transform 0.3s;
+    }
+    .email-btn:hover { transform: scale(1.05); }
+    .email-btn .ring { position: absolute; inset: -2px; border-radius: 999px; opacity: 0; background: linear-gradient(90deg,#89AACC,#4E85BF); transition: opacity 0.3s; }
+    .email-btn:hover .ring { opacity: 1; }
+    .email-btn .inner { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; background: hsl(var(--surface)); border-radius: 999px; padding: 0 20px; height: 48px; }
+    .footer-bar {
+      display: flex; justify-content: space-between; align-items: center; gap: 24px;
+      margin-top: 64px; padding-top: 24px; border-top: 1px solid hsl(var(--stroke)); flex-wrap: wrap;
+    }
+    .socials { display: flex; gap: 20px; }
+    .socials a { color: hsl(var(--muted)); font-size: 0.85rem; transition: color 0.3s; }
+    .socials a:hover { color: hsl(var(--text)); }
+    .avail { display: inline-flex; align-items: center; gap: 8px; color: hsl(var(--muted)); font-size: 0.85rem; }
+    .avail .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulse-dot 2s ease-in-out infinite; }
+
+    /* ───── LIGHTBOX ───── */
+    #lightbox {
+      position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.92);
+      display: none; place-items: center; padding: 40px; cursor: zoom-out;
+    }
+    #lightbox.open { display: grid; }
+    #lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 16px; }
+  </style>
+</head>
+<body>
+  <!-- ───── LOADING SCREEN ───── -->
+  <div id="loader">
+    <div class="loader-label eyebrow">Krishna Vardhan</div>
+    <div class="loader-words font-display">
+      <span class="active" data-w="0">Build</span>
+      <span data-w="1">Engineer</span>
+      <span data-w="2">Teach</span>
+    </div>
+    <div class="loader-count font-display" id="count">000</div>
+    <div class="loader-bar"><div class="accent-gradient" id="loadbar"></div></div>
+  </div>
+
+  <!-- ───── HERO ───── -->
+  <section class="hero" id="home">
+    <video id="heroVideo" autoplay muted loop playsinline>
+      <source src="https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8" type="application/x-mpegURL">
+    </video>
+    <div class="video-fallback" aria-hidden="true"></div>
+    <div class="overlay"></div>
+    <div class="bottom-fade"></div>
+
+    <nav class="navbar">
+      <div class="nav-pill" id="navPill">
+        <a class="logo" href="#home"><span class="font-display">KV</span></a>
+        <span class="nav-divider"></span>
+        <a class="nav-link active" href="#home">Home</a>
+        <a class="nav-link" href="#work">Work</a>
+        <a class="nav-link" href="#journal">Journal</a>
+        <span class="nav-divider"></span>
+        <a class="say-hi" href="#contact"><span class="ring"></span><span class="inner">Say hi ↗</span></a>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <span class="hero-eyebrow eyebrow">Portfolio '26</span>
+      <h1 class="hero-name font-display">Krishna Vardhan</h1>
+      <p class="hero-role">A <span class="font-display role-word" id="roleWord">Builder</span> lives in Kadapa.</p>
+      <p class="hero-desc">Building data pipelines, automation tools, and human-centered systems. Banking ETL to GCP AI/ML — one project at a time.</p>
+      <div class="cta-row">
+        <a class="btn btn-solid" href="#work">See Works</a>
+        <a class="btn btn-outline" href="#contact">Reach out...</a>
+      </div>
+    </div>
+
+    <div class="scroll-ind">
+      <span class="lbl">Scroll</span>
+      <div class="track"><i></i></div>
+    </div>
+  </section>
+
+  <!-- ───── SELECTED WORKS ───── -->
+  <section class="works" id="work">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div>
+          <span class="line"><i class="bar"></i><span class="eyebrow">Selected Work</span></span>
+          <h2>Built <span class="font-display">projects</span></h2>
+          <p>Data pipelines, OCR systems, health automation — each solving a real problem.</p>
+        </div>
+      </div>
+      <div class="bento">
+        <!-- VFS Document Verification -->
+        <a class="proj reveal" href="https://github.com/mamidi7/vfs-booking-system" target="_blank">
+          <div class="proj-img">
+            <canvas id="projBg1" width="800" height="600"></canvas>
+            <div class="halftone"></div>
+          </div>
+          <div class="hover-layer"><span class="proj-label">View — <span class="font-display">VFS Doc Verification</span></span></div>
+          <div class="proj-desc">
+            <h3>VFS Document Verification</h3>
+            <div class="tags"><span>FastAPI</span><span>OCR</span><span>GCP Vision</span><span>Telegram</span></div>
+          </div>
+        </a>
+        <!-- Helio Health Report -->
+        <a class="proj reveal" href="https://github.com/mamidi7/helio-report" target="_blank">
+          <div class="proj-img">
+            <canvas id="projBg2" width="600" height="800"></canvas>
+            <div class="halftone"></div>
+          </div>
+          <div class="hover-layer"><span class="proj-label">View — <span class="font-display">Helio Health Report</span></span></div>
+          <div class="proj-desc">
+            <h3>Helio Health Report</h3>
+            <div class="tags"><span>Python</span><span>Health Connect</span><span>SQLite</span><span>Telegram</span></div>
+          </div>
+        </a>
+        <!-- GenAI Daily Grind -->
+        <a class="proj reveal" href="https://github.com/mamidi7/gcp-genai-daily-grind" target="_blank">
+          <div class="proj-img">
+            <canvas id="projBg3" width="600" height="800"></canvas>
+            <div class="halftone"></div>
+          </div>
+          <div class="hover-layer"><span class="proj-label">View — <span class="font-display">GenAI Daily Grind</span></span></div>
+          <div class="proj-desc">
+            <h3>GCP GenAI Daily Grind</h3>
+            <div class="tags"><span>Vertex AI</span><span>LangChain</span><span>RAG</span><span>BigQuery</span></div>
+          </div>
+        </a>
+        <!-- Vontimitta Land Records -->
+        <a class="proj reveal" href="https://github.com/mamidi7" target="_blank">
+          <div class="proj-img">
+            <canvas id="projBg4" width="800" height="600"></canvas>
+            <div class="halftone"></div>
+          </div>
+          <div class="hover-layer"><span class="proj-label">View — <span class="font-display">Land Records Tool</span></span></div>
+          <div class="proj-desc">
+            <h3>AP Land Records Assistant</h3>
+            <div class="tags"><span>Python</span><span>Web Scraping</span><span>Govt Portals</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── JOURNAL ───── -->
+  <section class="journal" id="journal">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div>
+          <span class="line"><i class="bar"></i><span class="eyebrow">Journal</span></span>
+          <h2>Recent <span class="font-display">notes</span></h2>
+          <p>Building in the open — what I learn, what breaks, and how I fix it.</p>
+        </div>
+      </div>
+      <div class="entries">
+        <div class="entry reveal">
+          <div class="entry-img"><canvas id="journalImg1" width="144" height="144"></canvas></div>
+          <div class="body">
+            <h3>Building an OCR pipeline from scratch</h3>
+            <p>GCP Vision + EasyOCR + Tesseract — comparing accuracy across 3 engines for passport verification. Spoiler: Vision wins, but fallbacks matter.</p>
+            <div class="meta"><span>7 min read</span></div>
+          </div>
+          <span class="date">May 2026</span>
+        </div>
+        <div class="entry reveal">
+          <div class="entry-img"><canvas id="journalImg2" width="144" height="144"></canvas></div>
+          <div class="body">
+            <h3>GCP Vertex AI — my first 30 days</h3>
+            <p>From BigQuery to Vertex AI Pipelines. What surprised me, what broke, and the RAG system that finally worked.</p>
+            <div class="meta"><span>5 min read</span></div>
+          </div>
+          <span class="date">Apr 2026</span>
+        </div>
+        <div class="entry reveal">
+          <div class="entry-img"><canvas id="journalImg3" width="144" height="144"></canvas></div>
+          <div class="body">
+            <h3>Caring and coding — a balancing act</h3>
+            <p>Building production systems while being a primary caregiver. Lessons in prioritization, energy management, and what really matters.</p>
+            <div class="meta"><span>6 min read</span></div>
+          </div>
+          <span class="date">Mar 2026</span>
+        </div>
+        <div class="entry reveal">
+          <div class="entry-img"><canvas id="journalImg4" width="144" height="144"></canvas></div>
+          <div class="body">
+            <h3>Teaching kids to code with animation</h3>
+            <p>Animated HTML/SVG worksheets for 6-18 year olds. Building visual tools that make concepts click without a single line of setup.</p>
+            <div class="meta"><span>4 min read</span></div>
+          </div>
+          <span class="date">Feb 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── EXPLORATIONS ───── -->
+  <section class="explore" id="explore">
+    <div class="explore-pin">
+      <div class="inner container">
+        <span class="eyebrow">Explorations</span>
+        <h2 class="font-display" style="letter-spacing:-0.02em;">Lab & sandbox</h2>
+        <p class="muted" style="max-width:26rem;margin:0 auto;">Side experiments, prototypes, and things that haven't shipped — yet.</p>
+        <a class="explore-btn" href="https://github.com/mamidi7" target="_blank">Explore on GitHub ↗</a>
+      </div>
+    </div>
+    <div class="parallax-cols" id="parallaxCols">
+      <div class="pcol" id="pcol1">
+        <div class="pcard" style="transform:rotate(-3deg)"><canvas id="expCard1" width="320" height="320"></canvas></div>
+        <div class="pcard" style="transform:rotate(2deg)"><canvas id="expCard2" width="320" height="320"></canvas></div>
+        <div class="pcard" style="transform:rotate(-1deg)"><canvas id="expCard3" width="320" height="320"></canvas></div>
+      </div>
+      <div class="pcol" id="pcol2">
+        <div class="pcard" style="transform:rotate(2deg)"><canvas id="expCard4" width="320" height="320"></canvas></div>
+        <div class="pcard" style="transform:rotate(-2deg)"><canvas id="expCard5" width="320" height="320"></canvas></div>
+        <div class="pcard" style="transform:rotate(3deg)"><canvas id="expCard6" width="320" height="320"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── STATS ───── -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid reveal">
+        <div class="stat"><div class="num font-display">12+</div><div class="lbl">Projects Built</div></div>
+        <div class="stat"><div class="num font-display">15+</div><div class="lbl">Technologies</div></div>
+        <div class="stat"><div class="num font-display">56</div><div class="lbl">Days of Daily Grind</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── CONTACT / FOOTER ───── -->
+  <section class="contact" id="contact">
+    <video class="bgvid" autoplay muted loop playsinline>
+      <source src="https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8" type="application/x-mpegURL">
+    </video>
+    <div class="video-fallback" aria-hidden="true"></div>
+    <div class="overlay"></div>
+    <div class="inner container">
+      <div class="marquee"><div class="track" id="marqueeTrack"></div></div>
+      <div class="contact-cta">
+        <a class="email-btn" href="mailto:krishnavardhanai7@gmail.com"><span class="ring"></span><span class="inner">krishnavardhanai7@gmail.com</span></a>
+      </div>
+      <div class="footer-bar">
+        <div class="socials">
+          <a href="https://github.com/mamidi7" target="_blank">GitHub</a>
+          <a href="https://linkedin.com/in/krishnavardhan" target="_blank">LinkedIn</a>
+          <a href="mailto:krishnavardhanai7@gmail.com">Email</a>
+        </div>
+        <div class="avail"><span class="dot"></span>Available for projects</div>
+      </div>
+    </div>
+  </section>
+
+  <div id="lightbox" onclick="this.classList.remove('open')"><img id="lightboxImg" alt=""></div>
+
+  <script>
+    // ───── Loading screen ─────
+    (function loader() {
+      var el = document.getElementById('loader');
+      var countEl = document.getElementById('count');
+      var barEl = document.getElementById('loadbar');
+      var words = [].slice.call(document.querySelectorAll('.loader-words span'));
+      var start = Date.now();
+      var DUR = 2700;
+      var wordInterval = 900;
+      var wi = 0;
+
+      function tick() {
+        var elapsed = Date.now() - start;
+        var pct = Math.min(elapsed / DUR, 1);
+        var count = Math.round(pct * 100);
+        countEl.textContent = String(count).padStart(3, '0');
+        barEl.style.transform = 'scaleX(' + pct + ')';
+        if (pct < 1) { requestAnimationFrame(tick); }
+        else {
+          setTimeout(function() {
+            el.classList.add('done');
+            setTimeout(function() { el.style.display = 'none'; }, 600);
+          }, 400);
+        }
+      }
+      // Word cycling
+      setInterval(function() {
+        words.forEach(function(w, i) {
+          w.classList.toggle('active', i === (wi + 1) % words.length);
+          w.classList.toggle('exit', i === wi);
+        });
+        wi = (wi + 1) % words.length;
+        setTimeout(function() {
+          words.forEach(function(w) { w.classList.remove('exit'); });
+        }, 400);
+      }, wordInterval);
+      words[0].classList.add('active');
+      requestAnimationFrame(tick);
+    })();
+
+    // ───── Navbar scroll effect ─────
+    (function navScroll() {
+      var pill = document.getElementById('navPill');
+      var links = [].slice.call(document.querySelectorAll('.nav-link'));
+      var sections = ['home', 'work', 'journal', 'contact'];
+      window.addEventListener('scroll', function() {
+        pill.classList.toggle('scrolled', window.scrollY > 100);
+        // Active nav link
+        var scrollY = window.scrollY + 200;
+        var active = 'home';
+        sections.forEach(function(id) {
+          var sec = document.getElementById(id);
+          if (sec && sec.offsetTop <= scrollY) active = id;
+        });
+        links.forEach(function(l) {
+          l.classList.toggle('active', l.getAttribute('href') === '#' + active);
+        });
+      });
+    })();
+
+    // ───── Role cycling ─────
+    (function roleCycle() {
+      var roleEl = document.getElementById('roleWord');
+      var roles = ['Builder', 'Engineer', 'Learner', 'Maker'];
+      var ri = 0;
+      setInterval(function() {
+        ri = (ri + 1) % roles.length;
+        roleEl.style.animation = 'none';
+        roleEl.offsetHeight;
+        roleEl.textContent = roles[ri];
+        roleEl.style.animation = 'role-fade-in 0.4s ease-out';
+      }, 2000);
+    })();
+
+    // ───── Reveal on scroll ─────
+    (function revealObs() {
+      var els = [].slice.call(document.querySelectorAll('.reveal'));
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function(el) { el.classList.add('in'); });
+        return;
+      }
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+      }, { threshold: 0.15 });
+      els.forEach(function(el) { obs.observe(el); });
+    })();
+
+    // ───── Hero HLS video ─────
+    (function initVideo() {
+      var vid = document.getElementById('heroVideo');
+      if (vid && vid.canPlayType && !vid.canPlayType('application/vnd.apple.mpegurl')) {
+        var src = vid.querySelector('source').src;
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+        script.onload = function() {
+          if (Hls.isSupported()) { var hls = new Hls(); hls.loadSource(src); hls.attachMedia(vid); }
+        };
+        document.head.appendChild(script);
+      }
+    })();
+
+    // ───── Marquee ─────
+    (function marquee() {
+      var track = document.getElementById('marqueeTrack');
+      var text = 'BUILDING THE FUTURE • ';
+      var html = '';
+      for (var i = 0; i < 14; i++) html += '<span>' + text + '</span>';
+      track.innerHTML = html;
+      var x = 0;
+      var speed = 0.8;
+      function loop() {
+        x -= speed;
+        if (Math.abs(x) >= track.children[0].offsetWidth + 32) x = 0;
+        track.style.transform = 'translateX(' + x + 'px)';
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+
+    // ───── Parallax ─────
+    (function parallax() {
+      var cols = [document.getElementById('pcol1'), document.getElementById('pcol2')];
+      var cards1 = cols[0] ? [].slice.call(cols[0].querySelectorAll('.pcard')) : [];
+      var cards2 = cols[1] ? [].slice.call(cols[1].querySelectorAll('.pcard')) : [];
+      var section = document.querySelector('.explore');
+      if (!section) return;
+      function onScroll() {
+        var rect = section.getBoundingClientRect();
+        var progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (rect.height - window.innerHeight)));
+        cards1.forEach(function(c, i) { c.style.transform = 'translateY(' + (progress * -80 + i * 20) + 'px) rotate(-3deg)'; });
+        cards2.forEach(function(c, i) { c.style.transform = 'translateY(' + (progress * 60 - i * 15) + 'px) rotate(2deg)'; });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+
+    // ───── Lightbox ─────
+    (function lightbox() {
+      var lb = document.getElementById('lightbox');
+      var img = document.getElementById('lightboxImg');
+      document.addEventListener('click', function(e) {
+        var card = e.target.closest('.pcard canvas');
+        if (card && lb && img) {
+          img.src = card.toDataURL ? card.toDataURL() : '';
+          lb.classList.add('open');
+        }
+      });
+    })();
+
+    // ───── Project backgrounds (Canvas gradients) ─────
+    function drawGradient(id, colors) {
+      var c = document.getElementById(id);
+      if (!c) return;
+      var ctx = c.getContext('2d');
+      var w = c.width, h = c.height;
+      var grd = ctx.createLinearGradient(0, 0, w, h);
+      colors.forEach(function(stop, i) { grd.addColorStop(i / (colors.length - 1), stop); });
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, w, h);
+      // overlay pattern
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      for (var x = 0; x < w; x += 8) { for (var y = 0; y < h; y += 8) { if ((x + y) % 16 === 0) ctx.fillRect(x, y, 1, 1); } }
+    }
+    // Project cards
+    drawGradient('projBg1', ['#1a2a3a', '#0d1820', '#09121a']); // dark blue for VFS
+    drawGradient('projBg2', ['#1a2a30', '#0d1a20', '#0a1418']); // teal-dark for Helio
+    drawGradient('projBg3', ['#1a2430', '#0d1520', '#09101a']); // neutral for GenAI
+    drawGradient('projBg4', ['#1a3020', '#0d2018', '#091812']); // green-dark for land records
+    // Journal cards
+    drawGradient('journalImg1', ['#2a1a30', '#1a0d20', '#140a18']);
+    drawGradient('journalImg2', ['#1a2a40', '#0d1a30', '#0a1420']);
+    drawGradient('journalImg3', ['#30201a', '#20150d', '#18100a']);
+    drawGradient('journalImg4', ['#1a3028', '#0d2018', '#0a1812']);
+    // Exploration cards
+    drawGradient('expCard1', ['#2a1a20', '#1a0d14', '#140a10']);
+    drawGradient('expCard2', ['#1a2a38', '#0d1a24', '#0a1418']);
+    drawGradient('expCard3', ['#28202a', '#1a1420', '#14101a']);
+    drawGradient('expCard4', ['#202a1a', '#14200d', '#10180a']);
+    drawGradient('expCard5', ['#2a2820', '#1a1814', '#141210']);
+    drawGradient('expCard6', ['#1a202a', '#0d1420', '#0a1018']);
+  </script>
+</body>
+</html>
